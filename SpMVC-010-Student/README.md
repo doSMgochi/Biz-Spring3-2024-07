@@ -8,5 +8,49 @@
 
 - 다음의 dependencies 를 `maven repository` 에서 검색하여 `pom.xml` 에 등록한다.
 ```xml
+<!-- 
+	spring jdbc 로 검색
+	spring webmvc 와 버전 일치시킬 것
+ -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-jdbc</artifactId>
+    <version>5.2.25.RELEASE</version>
+</dependency>
+
+<!-- mybatis 로 검색하여 mybatis, mybatis-spring 찾기 -->
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis</artifactId>
+    <version>3.5.16</version>
+</dependency>
+
+<!--
+	spring-webmvc 5.2.x.RELEASE 를 사용할 때는
+	mybatis-spring 을 반드시 3.0.0 이하 버전을 사용할 것
+-->
+<dependency>
+    <groupId>org.mybatis</groupId>
+    <artifactId>mybatis-spring</artifactId>
+    <version>3.0.0</version>
+</dependency>
+
+<!-- dbcp 로 검색하여 commons-dbcp2 를 사용할 것 -->
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-dbcp2</artifactId>
+    <version>2.12.0</version>
+</dependency>
+
+<!--
+	mysql 로 검색하여 반드시 mysql-connector-j 를 사용할 것
+	mysql-connector-java 는 한글 문제와 timeZone 설정 부분에서
+	문제를 일으킬 수 있다.
+ -->
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <version>8.4.0</version>
+</dependency>
 
 ```
