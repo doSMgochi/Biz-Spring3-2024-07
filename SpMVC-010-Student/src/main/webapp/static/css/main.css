@@ -67,7 +67,16 @@ section.main {
 
   table {
     border-collapse: collapse;
-    border: 1px solid #aaa;
+    tbody {
+      /* Table 의 tbody 내의 tr tag 가 홀수 영역에 있는 요소만 배경 색 변경하기*/
+      tr:nth-of-type(odd) {
+        background-color: #ddd;
+      }
+      tr:hover {
+        background-color: #bbb;
+        cursor: pointer;
+      }
+    }
     th,
     td {
       border: 1px solid #aaa;
