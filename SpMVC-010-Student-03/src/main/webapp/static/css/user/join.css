@@ -1,0 +1,78 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+form.user.join {
+  width: 80%;
+  margin: 20px auto;
+
+  span {
+    display: none;
+    padding: 10px 16px;
+    margin: 8px auto;
+    width: 85%;
+    color: red;
+  }
+  fieldset {
+    text-align: center;
+    border-radius: 25px;
+
+    legend {
+      font-size: 2rem;
+      margin-bottom: 25px;
+      font-weight: bold;
+    }
+
+    input,
+    button {
+      width: 30%;
+      padding: 20px 10px;
+      font-size: 1.2rem;
+    }
+    input {
+      margin: 10px;
+      transition: 2s;
+      border: none;
+      border: 1px solid gray;
+      border-radius: 25px;
+
+      &:focus {
+        box-shadow: 4px 4px 4px black;
+        outline: none;
+      }
+    }
+
+    input::placeholder {
+      text-align: center;
+    }
+
+    input[type="button"],
+    input[type="submit"] {
+      cursor: pointer;
+      margin: 10px;
+      margin-bottom: 50px;
+      background-color: rgb(106, 147, 44);
+      color: white;
+      border: none;
+      box-shadow: 2px 2px 2px gray;
+      transition: 2s;
+
+      &:hover {
+        box-shadow: 4px 4px 4px black;
+      }
+    }
+  }
+}
+
+i {
+  display: inline-block;
+  padding: 10px;
+  font-size: 1.5rem;
+  background: linear-gradient(0deg, lightgray, black);
+  border-radius: 50%;
+  color: white;
+  box-shadow: 2px 2px 2px skyblue;
+}
