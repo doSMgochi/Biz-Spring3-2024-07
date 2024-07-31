@@ -1,12 +1,20 @@
 @charset "UTF-8";
-
+@import url("https://fonts.googleapis.com/css2?family=Cute+Font&family=Hahmlet:wght@100..900&display=swap");
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Hahmlet", serif;
   -ms-overflow-style: none; /* IE, Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+.cute-font-default {
+  font-family: "Cute Font", sans-serif;
+}
+
+.cute-font-1dot5 {
+  font-family: "Cute Font", sans-serif;
+  font-size: 1.5rem;
 }
 
 ::-webkit-scrollbar {
@@ -19,6 +27,8 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  background-color: #855e63;
+  background-size: cover;
 }
 
 html {
@@ -29,4 +39,11 @@ html {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+header img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
 }
