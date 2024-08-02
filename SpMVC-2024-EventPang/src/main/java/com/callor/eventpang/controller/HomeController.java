@@ -10,12 +10,46 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 public class HomeController {
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Model model) {
 
-		model.addAttribute("HOME", "HOME");
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String home() {
+
 		return "home";
 	}
-	
+
+	@RequestMapping(value = "/big-event", method = RequestMethod.GET)
+	public String bigEvent() {
+
+		return "big-event";
+	}
+
+	@RequestMapping(value = "/minor-event", method = RequestMethod.GET)
+	public String minorEvent() {
+
+		return "minor-event";
+	}
+
+	@RequestMapping(value = "/benefit", method = RequestMethod.GET)
+	public String benefit() {
+
+		return "benefit";
+	}
+
+	@RequestMapping(value = "/community", method = RequestMethod.GET)
+	public String community() {
+
+		return "community";
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public String login() {
+
+		return "login";
+	}
+
+	@RequestMapping(value = "/join", method = RequestMethod.GET)
+	public String join() {
+
+		return "join";
+	}
 }

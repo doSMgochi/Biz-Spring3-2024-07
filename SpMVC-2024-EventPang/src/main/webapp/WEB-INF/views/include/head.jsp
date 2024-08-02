@@ -7,6 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>이벤트팡!</title>
 <link href="${rootPath }/static/css/main.css" rel="stylesheet" />
+<link href="${rootPath }/static/css/board.css" rel="stylesheet" />
+<link href="${rootPath }/static/css/user.css" rel="stylesheet" />
 <script>
 	const rootPath = "${rootPath}";
 </script>

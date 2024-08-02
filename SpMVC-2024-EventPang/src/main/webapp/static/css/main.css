@@ -1,5 +1,6 @@
 @charset "UTF-8";
-@import url("https://fonts.googleapis.com/css2?family=Cute+Font&family=Hahmlet:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cute+Font&family=Hahmlet:wght@100..900&family=Poor+Story&family=Single+Day&display=swap");
+
 * {
   padding: 0;
   margin: 0;
@@ -84,24 +85,23 @@ header {
       text-align: center;
     }
   }
-}
-
-nav {
-  display: flex;
-  margin-top: 30px;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  ul {
+  nav {
     display: flex;
+    margin-top: 30px;
     justify-content: center;
-    width: 50vw;
-    padding: 10px;
-    border-radius: 15px;
-    box-shadow: 0px 0px 15px 4px white;
-    gap: 100px;
-    li {
-      cursor: pointer;
+    align-items: center;
+    color: white;
+    ul {
+      display: flex;
+      justify-content: center;
+      width: 50vw;
+      padding: 10px;
+      border-radius: 15px;
+      box-shadow: 0px 0px 15px 4px white;
+      gap: 100px;
+      li {
+        cursor: pointer;
+      }
     }
   }
 }
@@ -121,7 +121,8 @@ section.main {
   }
 
   .btn-hover {
-    font-size: 16px;
+    font-family: "Poor Story", sans-serif;
+    font-size: 1.3rem;
     font-weight: 600;
     color: #fff;
     cursor: pointer;
@@ -129,18 +130,20 @@ section.main {
     border: none;
     background-size: 300% 100%;
     border-radius: 50%;
+    moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
     transition: all 0.4s ease-in-out;
   }
-
   .btn-hover:hover {
-    animation: colorchange 1.5s ease;
+    background-position: 100% 0;
+    moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    -webkit-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
   }
-
-  .btn-hover:focus {
-    outline: none;
-  }
-
   .btn-hover.color-1 {
+    font-size: 2rem;
     width: 200px;
     height: 225px;
     background-image: linear-gradient(
@@ -165,6 +168,7 @@ section.main {
     box-shadow: 0 4px 15px 0 white;
   }
   .btn-hover.color-3 {
+    font-size: 3rem;
     width: 180px;
     height: 200px;
     background-image: linear-gradient(
@@ -228,7 +232,7 @@ section.main {
 
   .button-container:nth-of-type(1) {
     width: 200px;
-    top: 35%;
+    top: 40%;
     left: 20%;
     transform: translate3d(-50%, -50%, 0);
   }
@@ -240,7 +244,7 @@ section.main {
   }
   .button-container:nth-of-type(3) {
     width: 180px;
-    top: 40%;
+    top: 45%;
     left: 75%;
     transform: translate3d(-50%, -50%, 0);
   }
@@ -252,13 +256,13 @@ section.main {
   }
   .button-container:nth-of-type(5) {
     width: 40px;
-    top: 75%;
-    left: 75%;
+    top: 73%;
+    left: 76%;
     transform: translate3d(-50%, -50%, 0);
   }
   .button-container:nth-of-type(6) {
     width: 100px;
-    top: 27%;
+    top: 30%;
     left: 60%;
     transform: translate3d(-50%, -50%, 0);
   }
@@ -273,6 +277,17 @@ section.main {
     width: 100px;
     height: auto;
     z-index: 0;
+  }
+
+  .button-container img.tales-1,
+  .button-container img.tales-3 {
+    width: 150px;
+    height: auto;
+  }
+  .button-container img.tales-5,
+  .button-container img.tales-7 {
+    width: 50px;
+    height: auto;
   }
 
   .cloud {
@@ -318,17 +333,5 @@ section.main {
     border-radius: 50% 0 0 0;
     top: 90%;
     left: 60%;
-  }
-
-  @keyframes colorchange {
-    0% {
-      filter: brightness(100%);
-    }
-    50% {
-      filter: brightness(130%);
-    }
-    100% {
-      filter: brightness(100%);
-    }
   }
 }

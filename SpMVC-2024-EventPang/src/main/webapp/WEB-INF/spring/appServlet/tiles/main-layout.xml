@@ -14,6 +14,23 @@
 	</definition>
 
 	<definition name="home" extends="default">
-		<put-attribute name="content" value="" />
+		<put-attribute name="content"
+			value="/WEB-INF/views/info.jsp" />
+	</definition>
+	<definition name="big-event" extends="default">
+		<put-attribute name="content"
+			value="/WEB-INF/views/board/big-event.jsp" />
+	</definition>
+	<definition name="minor-event" extends="default">
+		<put-attribute name="content"
+			value="/WEB-INF/views/board/minor-event.jsp" />
+	</definition>
+	<definition name="benefit" extends="default">
+		<put-attribute name="content"
+			value="/WEB-INF/views/board/benefit.jsp" />
+	</definition>
+	<definition name="community" extends="default">
+		<put-attribute name="content"
+			value="/WEB-INF/views/board/community.jsp" />
 	</definition>
 </tiles-definitions>
