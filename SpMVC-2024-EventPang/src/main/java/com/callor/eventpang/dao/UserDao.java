@@ -8,10 +8,11 @@ import com.callor.eventpang.models.UserVO;
 
 public interface UserDao {
 	
-	@Select("SELECT * FROM tbl_users")
+	@Select("SELECT * FROM tbl_user")
 	public List<UserVO> selectAll();
 	
-	@Select("SELECT * FROM tbl_users WHERE username = #{username")
-	public UserVO findByUserName(String username);
+	@Select("SELECT * FROM tbl_user WHERE USER_ID = #{user_id}")
+	public UserVO findById(String id);
+	
 	public int insert(UserVO userVO);
 }

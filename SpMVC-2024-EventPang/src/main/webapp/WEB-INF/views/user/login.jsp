@@ -20,10 +20,11 @@
 			<c:if test="${not empty MSG}">
 				<h3>${MSG }</h3>
 			</c:if>
-			<input type="text" name="id" placeholder="ID를 입력하세요"
+			<input type="text" name="user_id" placeholder="아이디"
 				autocomplete="off" /><span>*</span> <input type="password"
-				name="password" placeholder="PASSWORD를 입력하세요" autocomplete="off" /><span>*</span>
+				name="user_password" placeholder="비밀번호" autocomplete="off" /><span>*</span>
 			<input type="submit" value="로그인" />
 		</form>
+		<!-- 로그인 유효성 검사 처리 (js로 해보자) 하고, 로그인 세션 처리 -->
 	</section>
 </body>

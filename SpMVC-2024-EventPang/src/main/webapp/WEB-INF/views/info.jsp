@@ -6,7 +6,7 @@
 	<header>
 		<nav>
 			<ul>
-				<li>메뉴 1</li>
+				<li><a href="${rootPath }/write">(임시) 이벤트 작성</a></li>
 				<li>메뉴 2</li>
 				<li>메뉴 3</li>
 				<!-- 누르면 화이트로 된 그림자 진 박스 나오고 opacity 조절 -->

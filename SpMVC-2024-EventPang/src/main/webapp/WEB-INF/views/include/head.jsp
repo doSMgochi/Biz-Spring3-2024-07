@@ -13,4 +13,6 @@
 	const rootPath = "${rootPath}";
 </script>
 <script src="${rootPath }/static/js/main.js"></script>
+<script src="${rootPath }/static/js/user/join.js"></script>
+<script src="${rootPath }/static/js/user/login.js"></script>
 </head>

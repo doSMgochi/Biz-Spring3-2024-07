@@ -40,16 +40,12 @@ public class HomeController {
 
 		return "community";
 	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
-
-		return "login";
+	
+	@RequestMapping(value = "/write", method = RequestMethod.GET)
+	public String write() {
+		
+		return "write";
 	}
-
-	@RequestMapping(value = "/join", method = RequestMethod.GET)
-	public String join() {
-
-		return "join";
-	}
+	
+	
 }

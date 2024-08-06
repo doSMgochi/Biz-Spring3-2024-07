@@ -25,17 +25,14 @@ public class UserController {
 		this.userService = userService;
 	}
 
-	// http://localhost:8080/student/user/join 까지의 요청을 처리할 부분
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String join() {
 		return "user/join";
 	}
 
-	// 회원가입 화면에 입력 후 회원가입 신청을 했을 때
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
 	public String join(UserVO userVO, Model model) {
 
-		// console 에 디버그 메시지를 표시하는 method
 		log.debug("폼에서 전달받은 데이터 : {}", userVO.toString());
 
 		int ret = userService.join(userVO);

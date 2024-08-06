@@ -4,6 +4,7 @@ body.user {
   margin: 0;
   font-family: "Hahmlet", sans-serif;
   text-align: center;
+  overflow: auto;
 
   nav {
     display: block;
@@ -64,17 +65,24 @@ body.user {
       }
       input,
       button {
+        min-width: 300px;
         outline: none;
         border: 2px solid #ddd;
         box-shadow: 0 0 5px 2px #ddd;
         border-radius: 25px;
       }
-      input[type="submit"] {
+      input[type="radio"] {
+        min-width: 0;
+      }
+      input[type="submit"],
+      input[type="button"] {
         cursor: pointer;
+        margin-bottom: 30px;
         background-color: pink;
         transition: 1s;
       }
-      input[type="submit"]:hover {
+      input[type="submit"]:hover,
+      input[type="button"]:hover {
         background-color: rgb(255, 143, 162);
       }
       span {
