@@ -14,9 +14,9 @@
 		</nav>
 		<a href=""><img src="${rootPath }/static/images/logo.png"
 			alt="logo" /></a>
-		<form>
+		<form action="${rootPath }/search">
 			<div>
-				<input type="text" placeholder="검색어를 입력하세요" />
+				<input type="text" placeholder="검색어를 입력하세요" name="search"/>
 			</div>
 		</form>
 	</header>

@@ -9,12 +9,12 @@
 			<li></li>
 			<li><a href="${rootPath }/"><img
 					src="${rootPath }/static/images/logo.png" alt="logo" /></a></li>
-			<li>로그인</li>
-			<li>회원가입</li>
+			<li><a href="${rootPath }/user/login">로그인</a></li>
+			<li><a href="${rootPath }/user/join">회원가입</a></li>
 		</ul>
 	</nav>
 	<hr class="hr-1" />
-	<h1>로그인</h1>
+	<div class="speech-bubble">로그인</div>
 	<section>
 		<form class="user join" method="post">
 			<c:if test="${not empty MSG}">
@@ -26,5 +26,6 @@
 			<input type="submit" value="로그인" />
 		</form>
 		<!-- 로그인 유효성 검사 처리 (js로 해보자) 하고, 로그인 세션 처리 -->
+		<!-- input relative 해서 absolute로 왼쪽 부분에 칸 먹이자 -->
 	</section>
 </body>

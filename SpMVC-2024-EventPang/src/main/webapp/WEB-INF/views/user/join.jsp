@@ -12,12 +12,12 @@
 			<li></li>
 			<li><a href="${rootPath }/"><img
 					src="${rootPath }/static/images/logo.png" alt="logo" /></a></li>
-			<li>로그인</li>
-			<li>회원가입</li>
+			<li><a href="${rootPath }/user/login">로그인</a></li>
+			<li><a href="${rootPath }/user/join">회원가입</a></li>
 		</ul>
 	</nav>
 	<hr class="hr-1" />
-	<h1>회원가입</h1>
+	<div class="speech-bubble">회원가입</div>
 	<section>
 		<form class="user join" method="post">
 			<c:if test="${JOIN_MSG == 'FAIL' }">
@@ -53,9 +53,9 @@
 			</div>
 			<div>
 				<label for="enterprise"><input type="radio" name="user_role"
-					value="enterprise" id="enterprise" /> 기업회원 </label> <label for="personal"><input
+					value="enterprise" id="enterprise" /> 기업 </label> <label for="personal"><input
 					type="radio" name="user_role" value="personal" id="personal" checked />
-					개인회원 </label>
+					개인 </label>
 			</div>
 			<div>
 				<input type="button" value="회원가입" />

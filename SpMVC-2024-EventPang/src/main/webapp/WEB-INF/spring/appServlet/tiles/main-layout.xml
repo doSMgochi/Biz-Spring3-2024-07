@@ -17,6 +17,10 @@
 		<put-attribute name="content"
 			value="/WEB-INF/views/info.jsp" />
 	</definition>
+	<definition name="search" extends="default">
+		<put-attribute name="content"
+			value="/WEB-INF/views/search.jsp" />
+	</definition>
 	<definition name="big-event" extends="default">
 		<put-attribute name="content"
 			value="/WEB-INF/views/board/big-event.jsp" />
@@ -36,5 +40,9 @@
 	<definition name="write" extends="default">
 		<put-attribute name="content"
 			value="/WEB-INF/views/board/write.jsp" />
+	</definition>
+	<definition name="view" extends="default">
+		<put-attribute name="content"
+			value="/WEB-INF/views/board/view.jsp" />
 	</definition>
 </tiles-definitions>

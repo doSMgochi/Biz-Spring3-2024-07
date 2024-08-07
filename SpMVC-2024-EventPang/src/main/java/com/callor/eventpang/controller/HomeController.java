@@ -47,5 +47,16 @@ public class HomeController {
 		return "write";
 	}
 	
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public String search() {
+		
+		return "search";
+	}
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public String view() {
+		
+		return "view";
+	}
+	
 	
 }
