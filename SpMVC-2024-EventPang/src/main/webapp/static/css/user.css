@@ -143,7 +143,10 @@ body.user {
       input::placeholder {
         text-align: center;
       }
-
+      h4 {
+        color: red;
+        font-weight: normal;
+      }
       span {
         display: none;
         padding: 10px 16px;

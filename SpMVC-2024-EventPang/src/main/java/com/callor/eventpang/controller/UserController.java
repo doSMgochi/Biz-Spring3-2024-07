@@ -46,14 +46,20 @@ public class UserController {
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(@RequestParam(required = false, defaultValue = "") String err, Model model) {
 		if (err.equalsIgnoreCase("NEED")) {
-			model.addAttribute("MSG", "로그인이 필요합니다");
+			model.addAttribute("MSG", "* 로그인이 필요합니다");
 		}
 		return null;
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(UserVO userVO, HttpSession httpSession) {
-		httpSession.setAttribute("USER", userVO);
+	public String login(UserVO userVO, HttpSession httpSession, Model model) {
+		   UserVO user = userService.findById(userVO.getUser_id());
+	        if (user == null || !user.getUser_password().equals(userVO.getUser_password())) {
+	            model.addAttribute("MSG", "* 아이디 또는 비밀번호가 잘못되었습니다.");
+	            return "user/login";
+	        }
+	        
+	        httpSession.setAttribute("USER", user);
 		return "redirect:/";
 	}
 
