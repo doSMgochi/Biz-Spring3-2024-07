@@ -52,6 +52,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return false;
       }
     }
+    if (index === INPUT_INDEX.BIRTH && !dateRegex.test(text)) {
+      error_inputs[index].textContent = ERROR_MESSAGE[8];
+      error_inputs[index].style.display = "inline-block";
+      modify_inputs[index].select();
+      return false;
+    }
     return true;
   };
   // 비밀번호 유효성 검사는 일단 throws 하고, 아이디 중복검사와 닉네임 중복검사 처리, 생년월일은 1900년생부터 현재 날짜까지 처리

@@ -4,19 +4,16 @@
   "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-
-	<definition name="default"
-		template="/WEB-INF/views/home.jsp">
+	<definition name="board"
+		template="/WEB-INF/views/board/board-home.jsp">
 		<put-attribute name="head"
 			value="/WEB-INF/views/include/head.jsp" />
+		<put-attribute name="header"
+			value="/WEB-INF/views/include/board-header.jsp" />
+	</definition>
+	<definition name="board/*" extends="board">
+		<put-attribute name="content"
+			value="/WEB-INF/views/board/{1}.jsp" />
 	</definition>
 
-	<definition name="home" extends="default">
-		<put-attribute name="content"
-			value="/WEB-INF/views/info.jsp" />
-	</definition>
-	<definition name="search" extends="default">
-		<put-attribute name="content"
-			value="/WEB-INF/views/search.jsp" />
-	</definition>
 </tiles-definitions>

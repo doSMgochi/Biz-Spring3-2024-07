@@ -13,7 +13,7 @@
 		</ul>
 	</nav>
 	<hr class="hr-1" />
-	<h1>검색</h1>
+	<h1>검색 결과</h1>
 	<div class="tag-library">
 	</div>
 	<section>

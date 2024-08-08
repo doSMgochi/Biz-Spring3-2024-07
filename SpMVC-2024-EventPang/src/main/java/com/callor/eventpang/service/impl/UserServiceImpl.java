@@ -9,14 +9,15 @@ import com.callor.eventpang.dao.UserDao;
 import com.callor.eventpang.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService{
-	
+public class UserServiceImpl implements UserService {
+
 	protected final UserDao userDao;
-	
+
 	public UserServiceImpl(UserDao userDao) {
 		super();
 		this.userDao = userDao;
 	}
+
 	@Override
 	public int join(UserVO userVO) {
 		List<UserVO> users = userDao.selectAll();
@@ -26,7 +27,23 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public UserVO findById(String id) {
-		return null;
+		if (id==null) {
+			return null;
+		}
+		UserVO userVO = userDao.findById(id);
+		return userVO;
+	}
+
+	@Override
+	public int deleteById(String id) {
+		int ret = userDao.deleteById(id);
+		return ret;
+	}
+
+	@Override
+	public int modifyById(String id) {
+		int ret = userDao.update(id);
+		return ret;
 	}
 
 }

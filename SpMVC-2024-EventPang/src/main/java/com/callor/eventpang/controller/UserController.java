@@ -43,6 +43,29 @@ public class UserController {
 		return "redirect:/";
 	}
 
+	@RequestMapping(value = "/modify", method = RequestMethod.GET)
+	public String modify(HttpSession httpSession, Model model) {
+		UserVO userVO = (UserVO) httpSession.getAttribute("USER");
+		if (userVO == null) {
+			return "user/login";
+		}
+		model.addAttribute("USER", userVO);
+		return "user/modify";
+	}
+
+	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	public String modify(UserVO userVO, Model model) {
+
+		log.debug("폼에서 전달받은 데이터 : {}", userVO.toString());
+
+		int ret = userService.modifyById(userVO.getUser_id());
+		if (ret < 1) {
+			model.addAttribute("MODIFY_MSG", "FAIL");
+			return "user/modify";
+		}
+		return "redirect:/";
+	}
+
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(@RequestParam(required = false, defaultValue = "") String err, Model model) {
 		if (err.equalsIgnoreCase("NEED")) {
@@ -53,14 +76,30 @@ public class UserController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(UserVO userVO, HttpSession httpSession, Model model) {
-		   UserVO user = userService.findById(userVO.getUser_id());
-	        if (user == null || !user.getUser_password().equals(userVO.getUser_password())) {
-	            model.addAttribute("MSG", "* 아이디 또는 비밀번호가 잘못되었습니다.");
-	            return "user/login";
-	        }
-	        
-	        httpSession.setAttribute("USER", user);
+		UserVO user = userService.findById(userVO.getUser_id());
+		if (user == null || !user.getUser_password().equals(userVO.getUser_password())) {
+			model.addAttribute("MSG", "* 아이디 또는 비밀번호가 잘못되었습니다.");
+			return "user/login";
+		}
+
+		httpSession.setAttribute("USER", user);
 		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession httpSession) {
+		httpSession.removeAttribute("USER");
+		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String delete(@RequestParam(required = false, defaultValue = "") String err, UserVO userVO, Model model) {
+		int ret = userService.deleteById(userVO.getUser_id());
+		if (ret < 1) {
+			model.addAttribute("JOIN_MSG", "FAIL");
+			return "user/modify";
+		}
+		return "user/login";
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)

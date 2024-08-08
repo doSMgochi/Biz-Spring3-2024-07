@@ -6,4 +6,6 @@ public interface UserService {
 	
 	public int join(UserVO userVO);
 	public UserVO findById(String id);
+	public int deleteById(String id);
+	public int modifyById(String id);
 }

@@ -118,6 +118,7 @@ body.user {
       button {
         text-align: center;
         min-width: 300px;
+        margin: auto;
         outline: none;
         border: 2px solid #ddd;
         box-shadow: 0 0 5px 2px #ddd;
