@@ -1,14 +1,13 @@
 package com.callor.eventpang.service.impl;
 
-import com.callor.eventpang.dao.EventDao;
-import com.callor.eventpang.models.EventVO;
-import com.callor.eventpang.models.UserVO;
-import com.callor.eventpang.service.EventService;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.List;
+import com.callor.eventpang.dao.EventDao;
+import com.callor.eventpang.models.EventVO;
+import com.callor.eventpang.service.EventService;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -20,18 +19,9 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public int saveEvent(EventVO event, HttpSession session, String category, String detailCategory) {
-		UserVO user = (UserVO) session.getAttribute("USER");
-
-		String combinedCategory = category + "," + detailCategory;
-		event.setEvt_category(combinedCategory);
-
-		event.setEvt_userid(user.getUser_id());
-		event.setEvt_writed_time(new Date());
-		event.setEvt_recommend(0);
-		event.setEvt_views(0);
-
-		return eventDao.insert(event);
+	public int saveEvent(EventVO event) {
+		// HttpSession과 category는 이미 컨트롤러에서 처리되므로 이곳에서는 필요 없음
+		return eventDao.insert(event); // 데이터베이스에 event 저장 로직
 	}
 
 	@Override
@@ -41,7 +31,7 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public EventVO findByNum(int evt_num) {
-		return null;
+		return eventDao.findByNum(evt_num);
 	}
 
 	@Override
@@ -52,6 +42,15 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public int deleteEvent(int evt_num) {
 		return 0;
+	}
+
+	@Override
+	public List<EventVO> findEventsByCategory(String category) {
+		List<EventVO> allEvents = eventDao.selectAll(); // 전체 이벤트 목록 가져오기
+		return allEvents.stream().filter(event -> {
+			String[] categories = event.getEvt_category().split(",");
+			return categories[0].equals(category);
+		}).collect(Collectors.toList());
 	}
 
 }

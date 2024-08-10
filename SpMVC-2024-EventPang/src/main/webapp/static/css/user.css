@@ -101,7 +101,8 @@ body.user {
       rgba(0, 0, 0, 0)
     );
   }
-  section {
+  section.login,
+  section.join {
     margin: auto;
     width: 30%;
 
@@ -109,45 +110,51 @@ body.user {
       margin-top: 30px;
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 20px;
+
       input,
       button {
         padding: 20px;
-      }
-      input,
-      button {
         text-align: center;
-        min-width: 300px;
-        margin: auto;
+        width: 300px;
+        max-width: 300px;
         outline: none;
         border: 2px solid #ddd;
         box-shadow: 0 0 5px 2px #ddd;
         border-radius: 25px;
       }
-      input[type="radio"] {
-        min-width: 0;
-      }
+
       input[type="submit"],
       input[type="button"] {
         cursor: pointer;
         margin-bottom: 30px;
         background-color: pink;
-        transition: 1s;
       }
+
       input[type="submit"]:hover,
       input[type="button"]:hover {
         background-color: rgb(255, 143, 162);
+        transition: 1s;
       }
+
+      input[type="radio"] {
+        width: auto;
+      }
+
       input[type="date"] {
         text-align: center;
       }
+
       input::placeholder {
         text-align: center;
       }
+
       h4 {
         color: red;
         font-weight: normal;
       }
+
       span {
         display: none;
         padding: 10px 16px;
@@ -156,5 +163,43 @@ body.user {
         color: red;
       }
     }
+  }
+}
+
+@media (max-width: 768px) {
+  body.user section.login,
+  body.user section.join {
+    width: 90%;
+  }
+
+  body.user ul.top-nav li:nth-of-type(1) {
+    flex: 0 0 0 !important;
+  }
+
+  body.user ul.top-nav li:nth-of-type(2),
+  body.user ul.top-nav li:nth-of-type(3),
+  body.user ul.top-nav li:nth-of-type(4) {
+    flex: 0 0 33% !important;
+    text-align: center !important;
+    margin: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body.user section.login,
+  body.user section.join {
+    width: 100%;
+  }
+
+  body.user section.login form input,
+  body.user section.join form input,
+  body.user section.login form button,
+  body.user section.join form button {
+    width: 90%;
+    width: 200px;
+  }
+  body.user section.login form input[type="radio"],
+  body.user section.join form input[type="radio"] {
+    width: auto !important;
   }
 }

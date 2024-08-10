@@ -3,9 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set value="${pageContext.request.contextPath }" var="rootPath" />
 
-
 <div class="speech-bubble">로그인</div>
-<section>
+<section class="login">
 	<form class="user join" method="post">
 		<c:if test="${not empty MSG}">
 			<h4>${MSG }</h4>
@@ -21,3 +20,4 @@
 		<input type="button" value="로그인" />
 	</form>
 </section>
+<!-- 가운데 정렬 문제 해결 -->

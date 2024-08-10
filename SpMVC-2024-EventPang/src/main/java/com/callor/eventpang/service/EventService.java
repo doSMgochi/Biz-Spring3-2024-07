@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EventService {
 
-	public int saveEvent(EventVO event, HttpSession session, String category, String detailCategory);
+	public int saveEvent(EventVO event);
 
 	public List<EventVO> selectAll();
 
@@ -16,4 +16,6 @@ public interface EventService {
 	public int updateEvent(EventVO event);
 
 	public int deleteEvent(int evt_num);
+	
+	public List<EventVO> findEventsByCategory(String category);
 }

@@ -5,9 +5,8 @@
 <link rel="stylesheet" href="${rootPath }/static/css/user/join.css" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
 <div class="speech-bubble">회원가입</div>
-<section>
+<section class="join">
 	<form class="user join" method="post">
 		<c:if test="${JOIN_MSG == 'FAIL' }">
 			<h3>회원가입에 실패했습니다</h3>

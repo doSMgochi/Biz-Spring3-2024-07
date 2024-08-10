@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <tiles:insertAttribute name="head" />
-<body>
+<body class="main">
 	<tiles:insertAttribute name="content" />
 </body>
 </html>

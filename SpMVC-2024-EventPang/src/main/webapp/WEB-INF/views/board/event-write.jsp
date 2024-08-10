@@ -39,7 +39,10 @@
 		<input type="text" name="evt_host" placeholder="주최자" /> <input
 			type="text" name="evt_link" placeholder="응모 링크" />
 	</div>
-	<textarea name="evt_body" id="editor" rows="10" cols="80"></textarea>
+	<textarea name="evt_body" id="evt_body" rows="10" cols="80"></textarea>
+	<input type="file" name="imageFile" id="imageFile" accept="image/*"
+		style="display: none;">
+	<button type="button" id="uploadImage">이미지 업로드</button>
 	<input type="text" name="evt_tags" placeholder="태그" />
 	<div class="three-box">
 		<div>시작 날짜</div>
@@ -53,5 +56,7 @@
 	</div>
 	<input type="number" name="evt_winner" placeholder="당첨자 수"> <input
 		type="text" name="evt_reward" placeholder="보상 내용"> <input
-		type="submit" value="작성" />
+		type="hidden" name="evt_category" id="evt_category"> <input
+		type="submit" value="작성" onclick="combineCategories(event)" />
 </form>
+<div class="margin-bottom"></div>

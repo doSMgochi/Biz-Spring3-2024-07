@@ -9,16 +9,6 @@
 <link href="${rootPath }/static/css/main.css" rel="stylesheet" />
 <link href="${rootPath }/static/css/board.css" rel="stylesheet" />
 <link href="${rootPath }/static/css/user.css" rel="stylesheet" />
-<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
-<script>
-	document.addEventListener("DOMContentLoaded", function() {
-		CKEDITOR.replace('editor', {
-		    filebrowserUploadUrl: '${rootPath}/board/upload-image',  // 수정된 경로
-		    filebrowserUploadMethod: 'form'
-		});
-	});
-</script>
-
 <script>
 	const rootPath = "${rootPath}";
 </script>
@@ -26,4 +16,5 @@
 <script src="${rootPath }/static/js/user/join.js"></script>
 <script src="${rootPath }/static/js/user/login.js"></script>
 <script src="${rootPath }/static/js/board/board.js"></script>
+<script src="${rootPath }/static/js/board/event-write.js"></script>
 </head>

@@ -1,20 +1,17 @@
 package com.callor.eventpang.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import com.callor.eventpang.utils.XssSanitizer;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.callor.eventpang.models.EventVO;
 import com.callor.eventpang.models.UserVO;
@@ -27,82 +24,93 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(value = "/board")
 public class BoardController {
 
-    private final EventService eventService;
+	private final EventService eventService;
 
-    public BoardController(EventService eventService) {
-        super();
-        this.eventService = eventService;
-    }
+	public BoardController(EventService eventService) {
+		super();
+		this.eventService = eventService;
+	}
 
-    @RequestMapping(value = "/big-event", method = RequestMethod.GET)
-    public String bigEvent(HttpSession httpSession, Model model) {
-        UserVO userVO = (UserVO) httpSession.getAttribute("USER");
-        model.addAttribute("logon", userVO);
-        return null;
-    }
+	@RequestMapping(value = "/{category}", method = RequestMethod.GET)
+	public String showEventsByCategory(@PathVariable("category") String category, Model model) {
+	    List<EventVO> events = eventService.findEventsByCategory(category);
+	    String categoryTitle = getCategoryTitle(category);
 
-    @RequestMapping(value = "/minor-event", method = RequestMethod.GET)
-    public String minorEvent() {
-        return null;
-    }
+	    model.addAttribute("events", events);
+	    model.addAttribute("categoryTitle", categoryTitle);
+	    return "board/event-list"; 
+	}
 
-    @RequestMapping(value = "/benefit", method = RequestMethod.GET)
-    public String benefit() {
-        return null;
-    }
+	private String getCategoryTitle(String category) {
+	    switch (category) {
+	        case "big-event":
+	            return "대박이벤트";
+	        case "minor-event":
+	            return "소소한 이벤트";
+	        case "benefit":
+	            return "혜택";
+	        case "community":
+	            return "커뮤니티";
+	        default:
+	            return "이벤트";
+	    }
+	}
+	
+	@RequestMapping(value = "/view/{evt_num}", method = RequestMethod.GET)
+	public String viewEvent(@PathVariable("evt_num") int evt_num, Model model) {
+	    EventVO event = eventService.findByNum(evt_num);
 
-    @RequestMapping(value = "/community", method = RequestMethod.GET)
-    public String community() {
-        return null;
-    }
+	    if (event == null) {
+	        return "redirect:/board/list"; 
+	    }
 
-    @RequestMapping(value = "/event-write", method = RequestMethod.GET)
-    public String write(HttpSession session) {
-        UserVO user = (UserVO)session.getAttribute("USER");
+	    model.addAttribute("event", event);
+	    return "board/event-view"; 
+	}
 
-        if (user == null) {
-            return "redirect:/user/login";
-        }
+	@RequestMapping(value = "/event-write", method = RequestMethod.GET)
+	public String write(HttpSession session) {
+		UserVO user = (UserVO) session.getAttribute("USER");
 
-        return "board/event-write";
-    }
+		if (user == null) {
+			return "redirect:/user/login";
+		}
 
-    @RequestMapping(value = "/event-write", method = RequestMethod.POST)
-    public String create(EventVO event, HttpSession session, String category, String detailCategory) {
-        eventService.saveEvent(event, session, category, detailCategory);
-        return "home";
-    }
+		return "board/event-write";
+	}
 
-    @RequestMapping(value = "/view", method = RequestMethod.GET)
-    public String view() {
-        return null;
-    }
+	@RequestMapping(value = "/event-write", method = RequestMethod.POST)
+	public String create(EventVO event, HttpSession session, String category, String detailCategory, Model model) {
+	    UserVO user = (UserVO) session.getAttribute("USER");
 
-    @RequestMapping(value = "/upload-image", method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, Object> uploadImage(@RequestParam("upload") MultipartFile file, HttpServletRequest request) {
-        Map<String, Object> result = new HashMap<>();
+	    if (user == null) {
+	        return "redirect:/user/login";
+	    }
 
-        String uploadDir = request.getServletContext().getRealPath("/upload/");
+	    String sanitizedContent = XssSanitizer.sanitize(event.getEvt_body());
+	    event.setEvt_body(sanitizedContent);
 
-        File uploadDirFile = new File(uploadDir);
-        if (!uploadDirFile.exists()) {
-            uploadDirFile.mkdirs();
-        }
+	    String combinedCategory = category + "," + detailCategory;
+	    event.setEvt_category(combinedCategory);
+	    event.setEvt_userid(user.getUser_id());
+	    event.setEvt_writed_time(new Date());
+	    event.setEvt_recommend(0);
+	    event.setEvt_views(0);
 
-        String fileName = file.getOriginalFilename();
-        File destinationFile = new File(uploadDir + fileName);
-        try {
-            file.transferTo(destinationFile);
-            String imageUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/upload/" + fileName;
-            result.put("uploaded", true); 
-            result.put("url", imageUrl);
-        } catch (IOException e) {
-            e.printStackTrace();
-            result.put("uploaded", false);
-            result.put("error", "File upload failed");
-        }
+	    eventService.saveEvent(event);
+	    model.addAttribute("event", event);
+	    return "board/event-view"; 
+	}
 
-        return result;
-    }
+	@RequestMapping(value = "/view", method = RequestMethod.GET)
+	public String view() {
+		return null;
+	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String test() {
+		return null;
+	}
+
+
 }

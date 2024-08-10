@@ -9,11 +9,11 @@ import com.callor.eventpang.models.EventVO;
 import com.callor.eventpang.models.UserVO;
 
 public interface EventDao {
-	@Select("SELECT * FROM tbl_event")
+	@Select("SELECT * FROM tbl_event ORDER BY evt_num")
 	public List<EventVO> selectAll();
 	
 	@Select("SELECT * FROM tbl_event WHERE evt_num = #{evt_num}")
-	public UserVO findByNum(int num);
+	public EventVO findByNum(int num);
 	
 	@Delete("DELETE FROM tbl_event WHERE evt_num = #{evt_num}")
 	public int deleteByNum(int num);
