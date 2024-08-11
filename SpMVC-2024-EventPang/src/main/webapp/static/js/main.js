@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 초기화 작업 시작
   reinitializeScripts();
 
-  // 링크 클릭 시 페이지 로드와 페이드 효과
+  // 페이지 내 링크 클릭 시 페이드 효과와 함께 페이지 로드
   document.body.addEventListener("click", function (e) {
     var target = e.target;
 
@@ -97,6 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 스크립트 재초기화 함수
   function reinitializeScripts() {
+    console.log("Reinitializing scripts...");
     initializeMenuItems(); // 메뉴 초기화
     initializeFireworkButtons(); // 불꽃놀이 버튼 초기화
 
@@ -160,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 로그인 폼 초기화
+  // 로그인 폼 초기화 함수
   function initializeLoginForm() {
     const form = document.querySelector("form.user.login-form");
     if (!form) {
@@ -206,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (yesValid) {
         // Handle form submission via AJAX
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", form.action, true); // 여기에서 수정된 URL이 사용됩니다.
+        xhr.open("POST", form.action, true);
         xhr.setRequestHeader(
           "Content-Type",
           "application/x-www-form-urlencoded"
@@ -241,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
     inputs[INPUT_INDEX.BUTTON].addEventListener("click", onLoginSubmit);
   }
 
-  // 회원가입 폼 초기화
+  // 회원가입 폼 초기화 함수
   function initializeJoinForm() {
     const form = document.querySelector("form.user.join-form");
     if (!form) {
@@ -403,8 +404,108 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // 회원정보 수정 폼 초기화
   function initializeModifyForm() {
-    // Your initializeModifyForm code goes here
+    const form = document.querySelector("form.user.modify-form");
+    if (!form) {
+      console.error("Modify form not found!");
+      return;
+    }
+
+    const INPUT_INDEX = {
+      USER_ID: 0,
+      CURRENT_PASSWORD: 1,
+      NEW_PASSWORD: 2,
+      NICK: 3,
+      EMAIL: 4,
+      BIRTH: 5,
+      TEL: 6,
+      BUTTON: 11,
+    };
+
+    const ERROR_MESSAGE = [
+      "* 아이디는 필수 항목입니다",
+      "* 현재 비밀번호는 필수 항목입니다",
+      "",
+      "* 닉네임은 필수 항목입니다",
+      "* 이메일은 필수 항목입니다",
+      "* 생년월일은 필수 항목입니다",
+      "* 전화번호는 필수 항목입니다",
+      "* 이메일 형식이 올바르지 않습니다",
+      "* 전화번호 형식이 올바르지 않습니다",
+    ];
+
+    const inputs = form.querySelectorAll("input");
+    const errorMessages = form.querySelectorAll("span");
+
+    // 유효성 검사 함수
+    const validateInput = (index) => {
+      let value = inputs[index].value;
+      if (index !== INPUT_INDEX.NEW_PASSWORD && !value) {
+        errorMessages[index].textContent = ERROR_MESSAGE[index];
+        errorMessages[index].style.display = "inline-block";
+        inputs[index].focus();
+        return false;
+      }
+      if (
+        index === INPUT_INDEX.EMAIL &&
+        value &&
+        !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+      ) {
+        errorMessages[index].textContent = ERROR_MESSAGE[7];
+        errorMessages[index].style.display = "inline-block";
+        inputs[index].focus();
+        return false;
+      }
+      if (
+        index === INPUT_INDEX.TEL &&
+        value &&
+        !/^\d{10,11}$/.test(value.replace(/-/g, ""))
+      ) {
+        errorMessages[index].textContent = ERROR_MESSAGE[8];
+        errorMessages[index].style.display = "inline-block";
+        inputs[index].focus();
+        return false;
+      }
+      return true;
+    };
+
+    // 폼 제출 처리
+    const onSubmit = (event) => {
+      event.preventDefault(); // 기본 제출을 막고 유효성 검사를 실행
+      console.log("Submit button clicked");
+
+      let valid = true;
+      errorMessages.forEach((span) => (span.style.display = "none"));
+
+      // 유효성 검사 (새로운 비밀번호는 검증하지 않음)
+      for (let i = 0; i < Object.keys(INPUT_INDEX).length - 1; i++) {
+        // BUTTON 제외
+        if (!validateInput(i)) {
+          valid = false;
+          break;
+        }
+      }
+
+      if (valid) {
+        console.log("Form is valid, submitting the form...");
+        form.submit(); // 서버에서 처리하도록 폼을 제출
+      } else {
+        console.log("Form validation failed");
+      }
+    };
+
+    // submit 버튼 클릭 시 onSubmit 이벤트 연결
+    inputs[INPUT_INDEX.BUTTON].addEventListener("click", onSubmit);
+
+    // 다른 입력 필드에서 Enter 키가 눌렸을 때 submit이 발생하지 않도록 처리
+    inputs.forEach((input, index) => {
+      if (index !== INPUT_INDEX.BUTTON) {
+        input.addEventListener("keypress", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault(); // 기본 Enter 키 동작을 막음
+          }
+        });
+      }
+    });
   }
 });

@@ -6,21 +6,21 @@
 <div class="speech-bubble">회원정보수정</div>
 <section class="join">
 	<form class="user join modify-form" method="post">
-		<c:if test="${JOIN_MSG == 'FAIL' }">
-			<h3>정보수정에 실패했습니다</h3>
+		<c:if test="${not empty MODIFY_MSG}">
+			<h3 style="color: red;">${MODIFY_MSG}</h3>
 		</c:if>
 		<div>
 			<input type="text" placeholder="아이디" name="user_id" id="user_id"
 				value="${USER.user_id }" readonly /> <span>*</span>
 		</div>
-        <div>
-            <input type="password" placeholder="현재 비밀번호" name="current_password"
-                id="current_password" autocomplete='off' required /> <span>*</span>
-        </div>
-        <div>
-            <input type="password" placeholder="변경할 비밀번호" name="new_password"
-                id="new_password" autocomplete='off' /> <span>*</span>
-        </div>
+		<div>
+			<input type="password" placeholder="현재 비밀번호" name="current_password"
+				id="current_password" autocomplete='off' required /> <span>*</span>
+		</div>
+		<div>
+			<input type="password" placeholder="변경할 비밀번호" name="new_password"
+				id="new_password" autocomplete='off' /> <span>*</span>
+		</div>
 		<div>
 			<input type="text" placeholder="닉네임" name="user_nick" id="user_nick"
 				autocomplete='off' value="${USER.user_nick }" /> <span>*</span>
