@@ -4,8 +4,8 @@
 <c:set value="${pageContext.request.contextPath }" var="rootPath" />
 
 <div class="speech-bubble">회원정보수정</div>
-<section>
-	<form class="user join" method="post">
+<section class="join">
+	<form class="user join modify-form" method="post">
 		<c:if test="${JOIN_MSG == 'FAIL' }">
 			<h3>정보수정에 실패했습니다</h3>
 		</c:if>
@@ -13,10 +13,14 @@
 			<input type="text" placeholder="아이디" name="user_id" id="user_id"
 				value="${USER.user_id }" readonly /> <span>*</span>
 		</div>
-		<div>
-			<input type="password" placeholder="비밀번호" name="user_password"
-				id="user_password" autocomplete='off' /> <span>*</span>
-		</div>
+        <div>
+            <input type="password" placeholder="현재 비밀번호" name="current_password"
+                id="current_password" autocomplete='off' required /> <span>*</span>
+        </div>
+        <div>
+            <input type="password" placeholder="변경할 비밀번호" name="new_password"
+                id="new_password" autocomplete='off' /> <span>*</span>
+        </div>
 		<div>
 			<input type="text" placeholder="닉네임" name="user_nick" id="user_nick"
 				autocomplete='off' value="${USER.user_nick }" /> <span>*</span>
@@ -33,42 +37,45 @@
 			<input type="text" placeholder="전화번호" name="user_tel" id="user_tel"
 				autocomplete='off' value="${USER.user_tel }" /> <span>*</span>
 		</div>
-		<div>
+		<div class="radio-group">
 			<c:choose>
 				<c:when test="${not empty USER && USER.user_gender eq 'male'}">
-					<label for="male"><input type="radio" name="user_gender"
-						value="male" id="male" checked /> 남성 </label>
-					<label for="female"><input type="radio" name="user_gender"
-						value="female" id="female" /> 여성 </label>
+					<input type="radio" name="user_gender" value="male" id="male"
+						checked />
+					<label for="male">남성</label>
+					<input type="radio" name="user_gender" value="female" id="female" />
+					<label for="female">여성</label>
 				</c:when>
 				<c:otherwise>
-					<label for="male"><input type="radio" name="user_gender"
-						value="male" id="male" /> 남성 </label>
-					<label for="female"><input type="radio" name="user_gender"
-						value="female" id="female" checked /> 여성 </label>
+					<input type="radio" name="user_gender" value="male" id="male" />
+					<label for="male">남성</label>
+					<input type="radio" name="user_gender" value="female" id="female"
+						checked />
+					<label for="female">여성</label>
 				</c:otherwise>
 			</c:choose>
 		</div>
-		<div>
+		<div class="radio-group">
 			<c:choose>
 				<c:when test="${not empty USER && USER.user_role eq 'enterprise'}">
-					<label for="enterprise"><input type="radio"
-						name="user_role" value="enterprise" id="enterprise" checked /> 기업
-					</label>
-					<label for="personal"><input type="radio" name="user_role"
-						value="personal" id="personal" /> 개인 </label>
+					<input type="radio" name="user_role" value="enterprise"
+						id="enterprise" checked />
+					<label for="enterprise">기업</label>
+					<input type="radio" name="user_role" value="personal" id="personal" />
+					<label for="personal">개인</label>
 				</c:when>
 				<c:otherwise>
-					<label for="enterprise"><input type="radio"
-						name="user_role" value="enterprise" id="enterprise" /> 기업 </label>
-					<label for="personal"><input type="radio" name="user_role"
-						value="personal" id="personal" checked /> 개인 </label>
+					<input type="radio" name="user_role" value="enterprise"
+						id="enterprise" />
+					<label for="enterprise">기업</label>
+					<input type="radio" name="user_role" value="personal" id="personal"
+						checked />
+					<label for="personal">개인</label>
 				</c:otherwise>
 			</c:choose>
 		</div>
 		<div>
 			<input type="button" value="정보수정" />
 		</div>
-		<!-- date 타입의 input 에 placeholder 넣는 방법 찾고, 라디오 버튼 input 박스 css 처리, join.js 에서 유효성 검사 처리 -->
 	</form>
 </section>

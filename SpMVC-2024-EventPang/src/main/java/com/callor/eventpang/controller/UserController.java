@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.callor.eventpang.models.UserVO;
 import com.callor.eventpang.service.UserService;
@@ -31,16 +32,22 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String join(UserVO userVO, Model model) {
+	public String join(UserVO userVO, Model model, HttpSession httpSession) {
 
-		log.debug("폼에서 전달받은 데이터 : {}", userVO.toString());
+	    log.debug("폼에서 전달받은 데이터 : {}", userVO.toString());
 
-		int ret = userService.join(userVO);
-		if (ret < 1) {
-			model.addAttribute("JOIN_MSG", "FAIL");
-			return "user/join";
-		}
-		return "redirect:/";
+	    int ret = userService.join(userVO);
+	    if (ret < 1) {
+	        model.addAttribute("JOIN_MSG", "FAIL");
+	        return "user/join";
+	    }
+
+	    UserVO user = userService.findById(userVO.getUser_id());
+	    if (user != null) {
+	        httpSession.setAttribute("USER", user); 
+	    }
+
+	    return "redirect:/"; 
 	}
 
 	@RequestMapping(value = "/modify", method = RequestMethod.GET)
@@ -54,18 +61,40 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modify(UserVO userVO, Model model) {
+	public String modify(UserVO userVO, 
+	                     @RequestParam("current_password") String currentPassword, 
+	                     @RequestParam(value = "new_password", required = false) String newPassword, 
+	                     Model model, HttpSession session) {
+	    log.debug("폼에서 전달받은 데이터 : {}", userVO.toString());
 
-		log.debug("폼에서 전달받은 데이터 : {}", userVO.toString());
+	    UserVO sessionUser = (UserVO) session.getAttribute("USER");
+	    if (sessionUser == null) {
+	        model.addAttribute("MODIFY_MSG", "FAIL");
+	        return "user/login";
+	    }
 
-		int ret = userService.modifyById(userVO.getUser_id());
-		if (ret < 1) {
-			model.addAttribute("MODIFY_MSG", "FAIL");
-			return "user/modify";
-		}
-		return "redirect:/";
+	    if (!sessionUser.getUser_password().equals(currentPassword)) {
+	        model.addAttribute("MODIFY_MSG", "INVALID_PASSWORD");
+	        return "user/modify";
+	    }
+
+	    if (newPassword != null && !newPassword.isEmpty()) {
+	        userVO.setUser_password(newPassword);
+	    } else {
+	        userVO.setUser_password(currentPassword);
+	    }
+
+	    int ret = userService.modify(userVO);
+
+	    if (ret < 1) {
+	        model.addAttribute("MODIFY_MSG", "FAIL");
+	        return "user/modify";
+	    }
+
+	    session.setAttribute("USER", userService.findById(userVO.getUser_id()));
+	    return "redirect:/";
 	}
-
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login(@RequestParam(required = false, defaultValue = "") String err, Model model) {
 		if (err.equalsIgnoreCase("NEED")) {
@@ -100,6 +129,16 @@ public class UserController {
 			return "user/modify";
 		}
 		return "user/login";
+	}
+	
+	@RequestMapping(value = "/check_id", method = RequestMethod.GET)
+	@ResponseBody
+	public String checkId(@RequestParam("user_id") String userId) {
+	    UserVO userVO = userService.findById(userId);
+	    if (userVO != null) {
+	        return "EXISTS"; 
+	    }
+	    return "AVAILABLE";
 	}
 
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)

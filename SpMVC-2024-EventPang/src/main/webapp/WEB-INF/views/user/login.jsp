@@ -5,7 +5,7 @@
 
 <div class="speech-bubble">로그인</div>
 <section class="login">
-	<form class="user join" method="post">
+	<form class="user join login-form" method="post">
 		<c:if test="${not empty MSG}">
 			<h4>${MSG }</h4>
 		</c:if>

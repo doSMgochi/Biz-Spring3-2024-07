@@ -1,25 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var menuItems = document.querySelectorAll("nav ul li");
   var body = document.querySelector("body");
 
-  // 메뉴 항목에 서브메뉴 동작 추가
-  menuItems.forEach(function (item) {
-    var submenu = item.querySelector("ul");
-
-    if (submenu) {
-      item.addEventListener("mouseenter", function () {
-        submenu.style.maxHeight = submenu.scrollHeight + "px";
-        submenu.style.opacity = "1";
-        submenu.style.transition = "max-height 0.5s ease, opacity 0.5s ease";
-      });
-
-      item.addEventListener("mouseleave", function () {
-        submenu.style.maxHeight = "0";
-        submenu.style.opacity = "0";
-        submenu.style.transition = "max-height 0.5s ease, opacity 0.5s ease";
-      });
-    }
-  });
+  // 초기화 작업 시작
+  reinitializeScripts();
 
   // 링크 클릭 시 페이지 로드와 페이드 효과
   document.body.addEventListener("click", function (e) {
@@ -87,6 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
         var newBodyClass = doc.querySelector("body").className;
         body.className = newBodyClass;
 
+        // URL 업데이트
+        history.pushState({}, "", url);
+
         fadeIn();
         reinitializeScripts(); // 스크립트 재초기화
       }
@@ -111,106 +97,314 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 스크립트 재초기화 함수
   function reinitializeScripts() {
-    // 필요한 스크립트나 이벤트를 다시 설정합니다.
-    var fireworkButtons = document.querySelectorAll(".fireworkBtn");
-
-    fireworkButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        btn.classList.add("on");
-
-        setTimeout(() => {
-          btn.classList.remove("on");
-        }, 3000);
-      });
-    });
-
-    // 여기서 추가적으로 필요한 초기화 작업들을 넣을 수 있습니다.
     initializeMenuItems(); // 메뉴 초기화
-    initializeLoginForm(); // 로그인 폼 초기화
+    initializeFireworkButtons(); // 불꽃놀이 버튼 초기화
+
+    if (typeof initializeLoginForm === "function") {
+      initializeLoginForm(); // 로그인 폼 초기화
+    }
+
+    if (typeof initializeJoinForm === "function") {
+      initializeJoinForm(); // 회원가입 폼 초기화
+    }
+
+    if (typeof initializeModifyForm === "function") {
+      initializeModifyForm(); // 회원정보 수정 폼 초기화
+    }
   }
 
-  // 처음 페이지 로드 시 이벤트 초기화
-  reinitializeScripts();
-});
+  // 불꽃놀이 버튼 초기화 함수
+  function initializeFireworkButtons() {
+    addFireworkEffect(".bigEventBtn", `${rootPath}/board/big-event`);
+    addFireworkEffect(".minorEventBtn", `${rootPath}/board/minor-event`);
+    addFireworkEffect(".benefitBtn", `${rootPath}/board/benefit`);
+    addFireworkEffect(".communityBtn", `${rootPath}/board/community`);
+  }
 
-function initializeMenuItems() {
-  var menuItems = document.querySelectorAll("nav ul li");
+  // 불꽃놀이 효과 추가 함수
+  function addFireworkEffect(buttonClass, url) {
+    const buttons = document.querySelectorAll(buttonClass);
+    buttons.forEach((button) => {
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        button.classList.add("on");
 
-  menuItems.forEach(function (item) {
-    var submenu = item.querySelector("ul");
-
-    if (submenu) {
-      item.addEventListener("mouseenter", function () {
-        submenu.style.maxHeight = submenu.scrollHeight + "px";
-        submenu.style.opacity = "1";
-        submenu.style.transition = "max-height 0.5s ease, opacity 0.5s ease";
+        setTimeout(() => {
+          button.classList.remove("on");
+          window.location.href = url;
+        }, 1000);
       });
+    });
+  }
 
-      item.addEventListener("mouseleave", function () {
-        submenu.style.maxHeight = "0";
-        submenu.style.opacity = "0";
-        submenu.style.transition = "max-height 0.5s ease, opacity 0.5s ease";
-      });
-    }
-  });
-}
+  // 메뉴 항목 초기화 함수
+  function initializeMenuItems() {
+    var menuItems = document.querySelectorAll("nav ul li");
 
-function initializeLoginForm() {
-  const INPUT_INDEX = {
-    ID: 0,
-    PASSWORD: 1,
-    BUTTON: 2,
-  };
+    menuItems.forEach(function (item) {
+      var submenu = item.querySelector("ul");
 
-  const ERROR_MESSAGE = [
-    "* 아이디는 필수 항목입니다",
-    "* 비밀번호는 필수 항목입니다",
-  ];
+      if (submenu) {
+        item.addEventListener("mouseenter", function () {
+          submenu.style.maxHeight = submenu.scrollHeight + "px";
+          submenu.style.opacity = "1";
+          submenu.style.transition = "max-height 0.5s ease, opacity 0.5s ease";
+        });
 
-  const login_form = document.querySelector("form.user.join");
-  login_form.action = `${rootPath}/user/login`; // 로그인 폼의 액션을 설정합니다.
-  const login_inputs = login_form.querySelectorAll("input");
-  const error_inputs = login_form.querySelectorAll("span");
+        item.addEventListener("mouseleave", function () {
+          submenu.style.maxHeight = "0";
+          submenu.style.opacity = "0";
+          submenu.style.transition = "max-height 0.5s ease, opacity 0.5s ease";
+        });
+      }
+    });
+  }
 
-  const emptyValid = (index) => {
-    const text = login_inputs[index].value;
-    if (!text) {
-      error_inputs[index].textContent = ERROR_MESSAGE[index];
-      error_inputs[index].style.display = "inline-block";
-      login_inputs[index].select();
-      return false;
-    }
-    return true;
-  };
-
-  const onLoginSubmit = (event) => {
-    event.preventDefault(); // prevent default form submission
-
-    let yesValid = true;
-    for (let i = 0; i < error_inputs.length; i++) {
-      const span = error_inputs[i];
-      span.style.display = "none";
-      if (!(yesValid = emptyValid(i))) break;
+  // 로그인 폼 초기화
+  function initializeLoginForm() {
+    const form = document.querySelector("form.user.login-form");
+    if (!form) {
+      console.error("Login form not found!");
+      return;
     }
 
-    if (yesValid) {
-      // Handle form submission via AJAX
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", login_form.action, true); // 여기에서 수정된 URL이 사용됩니다.
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 400) {
-          // Handle successful login
-          window.location.href = `${rootPath}/`; // Redirect after successful login
-        } else {
-          // Handle error response
-          alert("Login failed. Please try again.");
+    const INPUT_INDEX = {
+      ID: 0,
+      PASSWORD: 1,
+      BUTTON: 2,
+    };
+
+    const ERROR_MESSAGE = [
+      "* 아이디는 필수 항목입니다",
+      "* 비밀번호는 필수 항목입니다",
+    ];
+
+    const inputs = form.querySelectorAll("input");
+    const errorMessages = form.querySelectorAll("span");
+
+    const emptyValid = (index) => {
+      const text = inputs[index].value;
+      if (!text) {
+        errorMessages[index].textContent = ERROR_MESSAGE[index];
+        errorMessages[index].style.display = "inline-block";
+        inputs[index].select();
+        return false;
+      }
+      return true;
+    };
+
+    const onLoginSubmit = (event) => {
+      event.preventDefault(); // prevent default form submission
+
+      let yesValid = true;
+      for (let i = 0; i < errorMessages.length; i++) {
+        const span = errorMessages[i];
+        span.style.display = "none";
+        if (!(yesValid = emptyValid(i))) break;
+      }
+
+      if (yesValid) {
+        // Handle form submission via AJAX
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", form.action, true); // 여기에서 수정된 URL이 사용됩니다.
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.onload = function () {
+          if (xhr.status >= 200 && xhr.status < 400) {
+            // Handle successful login
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xhr.responseText, "text/html");
+
+            const newContent = doc.querySelector("body").innerHTML;
+            document.body.innerHTML = newContent;
+
+            const newBodyClass = doc.querySelector("body").className;
+            document.body.className = newBodyClass;
+
+            // URL 업데이트
+            history.pushState({}, "", `${rootPath}/`);
+
+            fadeIn();
+            reinitializeScripts(); // 스크립트 재초기화
+          } else {
+            // Handle error response
+            alert("Login failed. Please try again.");
+          }
+        };
+        const formData = new FormData(form);
+        xhr.send(new URLSearchParams(formData).toString());
+      }
+    };
+
+    inputs[INPUT_INDEX.BUTTON].addEventListener("click", onLoginSubmit);
+  }
+
+  // 회원가입 폼 초기화
+  function initializeJoinForm() {
+    const form = document.querySelector("form.user.join-form");
+    if (!form) {
+      console.error("Join form not found!");
+      return;
+    }
+
+    const INPUT_INDEX = {
+      ID: 0,
+      PASSWORD: 1,
+      NICK: 2,
+      EMAIL: 3,
+      BIRTH: 4,
+      TEL: 5,
+      GENDER_MALE: 6,
+      GENDER_FEMALE: 7,
+      ROLE_ENTERPRISE: 8,
+      ROLE_PERSONAL: 9,
+      BUTTON: 10,
+    };
+
+    const ERROR_MESSAGE = [
+      "* 아이디는 필수 항목입니다",
+      "* 비밀번호는 필수 항목입니다",
+      "* 닉네임은 필수 항목입니다",
+      "* 이메일은 필수 항목입니다",
+      "* 생년월일은 필수 항목입니다",
+      "* 전화번호는 필수 항목입니다",
+      "* 이메일 형식이 올바르지 않습니다",
+      "* 전화번호 형식이 올바르지 않습니다",
+      "* 아이디가 이미 사용 중입니다",
+    ];
+
+    const inputs = form.querySelectorAll("input");
+    const errorMessages = form.querySelectorAll("span");
+    const birthInput = inputs[INPUT_INDEX.BIRTH];
+    birthInput.type = "text";
+    birthInput.placeholder = "생년월일";
+    birthInput.addEventListener("focus", () => {
+      birthInput.type = "date";
+      birthInput.placeholder = "";
+    });
+    birthInput.addEventListener("blur", () => {
+      if (birthInput.value === "") {
+        birthInput.type = "text";
+        birthInput.placeholder = "생년월일";
+      }
+    });
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneRegex = /^\d{10,11}$/;
+
+    const checkIdDuplicate = (callback) => {
+      const userId = inputs[INPUT_INDEX.ID].value;
+      if (userId) {
+        fetch(`${rootPath}/user/check_id?user_id=${encodeURIComponent(userId)}`)
+          .then((response) => response.text())
+          .then((result) => {
+            if (result === "EXISTS") {
+              errorMessages[INPUT_INDEX.ID].textContent = ERROR_MESSAGE[8];
+              errorMessages[INPUT_INDEX.ID].style.display = "inline-block";
+              callback(false);
+            } else {
+              callback(true);
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            callback(false);
+          });
+      } else {
+        callback(true);
+      }
+    };
+
+    const validateInput = (index) => {
+      let value = inputs[index].value;
+      if (!value) {
+        errorMessages[index].textContent = ERROR_MESSAGE[index];
+        errorMessages[index].style.display = "inline-block";
+        inputs[index].focus();
+        return false;
+      }
+      if (index === INPUT_INDEX.EMAIL && !emailRegex.test(value)) {
+        errorMessages[index].textContent = ERROR_MESSAGE[6];
+        errorMessages[index].style.display = "inline-block";
+        inputs[index].focus();
+        return false;
+      }
+      if (index === INPUT_INDEX.TEL) {
+        value = value.replace(/-/g, "");
+        if (!phoneRegex.test(value)) {
+          errorMessages[index].textContent = ERROR_MESSAGE[7];
+          errorMessages[index].style.display = "inline-block";
+          inputs[index].focus();
+          return false;
         }
-      };
-      const formData = new FormData(login_form);
-      xhr.send(new URLSearchParams(formData).toString());
-    }
-  };
+      }
+      return true;
+    };
 
-  login_inputs[INPUT_INDEX.BUTTON].addEventListener("click", onLoginSubmit);
-}
+    const onSubmit = (event) => {
+      event.preventDefault(); // 기본 제출을 막고 유효성 검사를 실행
+
+      let valid = true;
+      errorMessages.forEach((span) => (span.style.display = "none"));
+
+      checkIdDuplicate((isAvailable) => {
+        if (isAvailable) {
+          for (let i = 0; i < inputs.length; i++) {
+            if (!validateInput(i)) {
+              valid = false;
+              break;
+            }
+          }
+          if (valid) {
+            console.log("Form is valid, submitting...");
+
+            // 폼 데이터를 POST로 제출
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", form.action, true); // 폼의 action 속성에 지정된 URL로 POST 요청
+            xhr.setRequestHeader(
+              "Content-Type",
+              "application/x-www-form-urlencoded"
+            );
+
+            xhr.onload = function () {
+              if (xhr.status >= 200 && xhr.status < 400) {
+                // 서버가 요청을 성공적으로 처리함
+                window.location.href = `${rootPath}/`; // 성공 시 리다이렉트
+              } else {
+                // 요청이 실패함
+                console.error(
+                  "Form submission failed:",
+                  xhr.status,
+                  xhr.statusText,
+                  xhr.responseText
+                );
+                alert("Form submission failed. Please try again.");
+              }
+            };
+
+            // 폼 데이터를 URL 인코딩 형식으로 변환하여 전송
+            const formData = new FormData(form);
+            xhr.send(new URLSearchParams(formData).toString());
+          }
+        }
+      });
+    };
+
+    inputs[INPUT_INDEX.BUTTON].addEventListener("click", onSubmit);
+
+    inputs[INPUT_INDEX.ID].addEventListener("blur", () => {
+      checkIdDuplicate((isAvailable) => {
+        if (!isAvailable) {
+          inputs[INPUT_INDEX.ID].focus();
+        }
+      });
+    });
+  }
+
+  // 회원정보 수정 폼 초기화
+  function initializeModifyForm() {
+    // Your initializeModifyForm code goes here
+  }
+});

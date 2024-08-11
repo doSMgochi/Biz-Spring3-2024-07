@@ -41,8 +41,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int modifyById(String id) {
-		int ret = userDao.update(id);
+	public int modify(UserVO userVO) {
+		int ret = userDao.update(userVO);
 		return ret;
 	}
 
