@@ -1,12 +1,7 @@
 package com.callor.eventpang.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpSession;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -77,13 +72,13 @@ public class UserController {
 	        return "user/login";
 	    }
 
-	    // 현재 비밀번호가 일치하지 않으면
+	  
 	    if (!sessionUser.getUser_password().equals(currentPassword)) {
 	        model.addAttribute("MODIFY_MSG", "현재 비밀번호가 올바르지 않습니다.");
-	        return "user/modify"; // 비밀번호가 틀리면 modify.jsp로 리다이렉트
+	        return "user/modify"; 
 	    }
 
-	    // 새로운 비밀번호가 입력된 경우에만 비밀번호를 변경
+	 
 	    if (newPassword != null && !newPassword.isEmpty()) {
 	        userVO.setUser_password(newPassword);
 	    } else {
@@ -94,11 +89,11 @@ public class UserController {
 
 	    if (ret < 1) {
 	        model.addAttribute("MODIFY_MSG", "정보 수정에 실패했습니다.");
-	        return "user/modify"; // 실패 시 modify.jsp로 리다이렉트
+	        return "user/modify"; 
 	    }
 
 	    session.setAttribute("USER", userService.findById(userVO.getUser_id()));
-	    return "redirect:/"; // 성공 시 홈으로 리다이렉트
+	    return "redirect:/"; 
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)

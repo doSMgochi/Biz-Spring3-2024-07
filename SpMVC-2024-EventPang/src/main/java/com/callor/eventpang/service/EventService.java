@@ -1,9 +1,10 @@
 package com.callor.eventpang.service;
 
-import com.callor.eventpang.models.EventVO;
-
-import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import com.callor.eventpang.models.EventVO;
 
 public interface EventService {
 
@@ -18,4 +19,7 @@ public interface EventService {
 	public int deleteEvent(int evt_num);
 	
 	public List<EventVO> findEventsByCategory(String category);
+	
+	public Map<String, String> splitCategory(String category);
+	public String formatDateTime(Date date);
 }

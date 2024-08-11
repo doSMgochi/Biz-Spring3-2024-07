@@ -1,9 +1,8 @@
 package com.callor.eventpang.controller;
 
-import com.callor.eventpang.utils.XssSanitizer;
-
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.callor.eventpang.models.EventVO;
 import com.callor.eventpang.models.UserVO;
 import com.callor.eventpang.service.EventService;
+import com.callor.eventpang.utils.XssSanitizer;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -64,7 +64,21 @@ public class BoardController {
 	        return "redirect:/board/list"; 
 	    }
 
+	    Map<String, String> categoryMap = eventService.splitCategory(event.getEvt_category());
+
+	    String formattedWritedTime = eventService.formatDateTime(event.getEvt_writed_time());
+	    String formattedStartTime = eventService.formatDateTime(event.getEvt_start_time());
+	    String formattedEndTime = eventService.formatDateTime(event.getEvt_end_time());
+	    String formattedWinningTime = eventService.formatDateTime(event.getEvt_winning_time());
+
 	    model.addAttribute("event", event);
+	    model.addAttribute("mainCategory", categoryMap.get("mainCategory"));
+	    model.addAttribute("subCategory", categoryMap.get("subCategory"));
+	    model.addAttribute("formattedWritedTime", formattedWritedTime);
+	    model.addAttribute("formattedStartTime", formattedStartTime);
+	    model.addAttribute("formattedEndTime", formattedEndTime);
+	    model.addAttribute("formattedWinningTime", formattedWinningTime);
+
 	    return "board/event-view"; 
 	}
 

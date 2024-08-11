@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         history.pushState({}, "", url);
 
         fadeIn();
-        reinitializeScripts(); // 스크립트 재초기화
+        reinitializeScripts();
       }
     };
   }
@@ -97,20 +97,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 스크립트 재초기화 함수
   function reinitializeScripts() {
-    console.log("Reinitializing scripts...");
-    initializeMenuItems(); // 메뉴 초기화
-    initializeFireworkButtons(); // 불꽃놀이 버튼 초기화
+    initializeMenuItems();
+    initializeFireworkButtons();
 
     if (typeof initializeLoginForm === "function") {
-      initializeLoginForm(); // 로그인 폼 초기화
+      initializeLoginForm();
     }
 
     if (typeof initializeJoinForm === "function") {
-      initializeJoinForm(); // 회원가입 폼 초기화
+      initializeJoinForm();
     }
 
     if (typeof initializeModifyForm === "function") {
-      initializeModifyForm(); // 회원정보 수정 폼 초기화
+      initializeModifyForm();
     }
   }
 
@@ -165,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function initializeLoginForm() {
     const form = document.querySelector("form.user.login-form");
     if (!form) {
-      console.error("Login form not found!");
+      console.error("Login 폼을 찾을 수 없습니다.");
       return;
     }
 
@@ -195,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const onLoginSubmit = (event) => {
-      event.preventDefault(); // prevent default form submission
+      event.preventDefault();
 
       let yesValid = true;
       for (let i = 0; i < errorMessages.length; i++) {
@@ -205,7 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (yesValid) {
-        // Handle form submission via AJAX
         const xhr = new XMLHttpRequest();
         xhr.open("POST", form.action, true);
         xhr.setRequestHeader(
@@ -214,7 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         xhr.onload = function () {
           if (xhr.status >= 200 && xhr.status < 400) {
-            // Handle successful login
             const parser = new DOMParser();
             const doc = parser.parseFromString(xhr.responseText, "text/html");
 
@@ -224,14 +221,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const newBodyClass = doc.querySelector("body").className;
             document.body.className = newBodyClass;
 
-            // URL 업데이트
             history.pushState({}, "", `${rootPath}/`);
 
             fadeIn();
-            reinitializeScripts(); // 스크립트 재초기화
+            reinitializeScripts();
           } else {
-            // Handle error response
-            alert("Login failed. Please try again.");
+            alert("알 수 없는 오류로 로그인에 실패하였습니다.");
           }
         };
         const formData = new FormData(form);
@@ -242,11 +237,10 @@ document.addEventListener("DOMContentLoaded", function () {
     inputs[INPUT_INDEX.BUTTON].addEventListener("click", onLoginSubmit);
   }
 
-  // 회원가입 폼 초기화 함수
   function initializeJoinForm() {
     const form = document.querySelector("form.user.join-form");
     if (!form) {
-      console.error("Join form not found!");
+      console.error("Join 폼을 찾을 수 없습니다.");
       return;
     }
 
@@ -345,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const onSubmit = (event) => {
-      event.preventDefault(); // 기본 제출을 막고 유효성 검사를 실행
+      event.preventDefault();
 
       let valid = true;
       errorMessages.forEach((span) => (span.style.display = "none"));
@@ -359,11 +353,8 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           }
           if (valid) {
-            console.log("Form is valid, submitting...");
-
-            // 폼 데이터를 POST로 제출
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", form.action, true); // 폼의 action 속성에 지정된 URL로 POST 요청
+            xhr.open("POST", form.action, true);
             xhr.setRequestHeader(
               "Content-Type",
               "application/x-www-form-urlencoded"
@@ -371,21 +362,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
             xhr.onload = function () {
               if (xhr.status >= 200 && xhr.status < 400) {
-                // 서버가 요청을 성공적으로 처리함
-                window.location.href = `${rootPath}/`; // 성공 시 리다이렉트
+                window.location.href = `${rootPath}/`;
               } else {
-                // 요청이 실패함
                 console.error(
-                  "Form submission failed:",
+                  "폼 요청 실패",
                   xhr.status,
                   xhr.statusText,
                   xhr.responseText
                 );
-                alert("Form submission failed. Please try again.");
+                alert("전송에 실패했습니다. 다시 시도해주세요.");
               }
             };
 
-            // 폼 데이터를 URL 인코딩 형식으로 변환하여 전송
             const formData = new FormData(form);
             xhr.send(new URLSearchParams(formData).toString());
           }
@@ -407,7 +395,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function initializeModifyForm() {
     const form = document.querySelector("form.user.modify-form");
     if (!form) {
-      console.error("Modify form not found!");
+      console.error("modify 폼을 찾을 수 없습니다.");
       return;
     }
 
@@ -471,38 +459,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 폼 제출 처리
     const onSubmit = (event) => {
-      event.preventDefault(); // 기본 제출을 막고 유효성 검사를 실행
-      console.log("Submit button clicked");
+      event.preventDefault();
 
       let valid = true;
       errorMessages.forEach((span) => (span.style.display = "none"));
 
-      // 유효성 검사 (새로운 비밀번호는 검증하지 않음)
+      // 유효성 검사
       for (let i = 0; i < Object.keys(INPUT_INDEX).length - 1; i++) {
-        // BUTTON 제외
         if (!validateInput(i)) {
           valid = false;
           break;
         }
       }
-
-      if (valid) {
-        console.log("Form is valid, submitting the form...");
-        form.submit(); // 서버에서 처리하도록 폼을 제출
-      } else {
-        console.log("Form validation failed");
-      }
     };
 
-    // submit 버튼 클릭 시 onSubmit 이벤트 연결
     inputs[INPUT_INDEX.BUTTON].addEventListener("click", onSubmit);
 
-    // 다른 입력 필드에서 Enter 키가 눌렸을 때 submit이 발생하지 않도록 처리
     inputs.forEach((input, index) => {
       if (index !== INPUT_INDEX.BUTTON) {
         input.addEventListener("keypress", (event) => {
           if (event.key === "Enter") {
-            event.preventDefault(); // 기본 Enter 키 동작을 막음
+            event.preventDefault();
           }
         });
       }

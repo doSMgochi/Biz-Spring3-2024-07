@@ -129,6 +129,87 @@ section.items {
   box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
     7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;
 }
+.event-container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.event-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.event-header img {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+.event-header .event-title {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.event-meta {
+  font-size: 0.9em;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.event-detail {
+  display: flex;
+  align-items: center;
+}
+
+.event-detail .label {
+  width: 120px;
+  font-weight: bold;
+  color: #555;
+  margin-right: 10px;
+  text-align: left;
+}
+
+.event-detail .value {
+  color: #333;
+}
+
+.event-actions {
+  margin: 40px 0;
+  display: flex;
+  gap: 15px;
+}
+
+.event-actions button {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.save-event {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.apply-event {
+  background-color: pink;
+  color: #fff;
+}
 
 form.write {
   width: 50vw;

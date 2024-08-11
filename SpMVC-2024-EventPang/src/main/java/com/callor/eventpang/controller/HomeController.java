@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * Handles requests for the application home page.
- */
 @Controller
 public class HomeController {
 

@@ -20,4 +20,3 @@
 		<input type="button" value="로그인" />
 	</form>
 </section>
-<!-- 가운데 정렬 문제 해결 -->

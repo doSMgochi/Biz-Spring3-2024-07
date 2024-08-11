@@ -15,24 +15,24 @@
 			<option value="community">커뮤니티</option>
 		</select> <select id="secondSelect" name="detailCategory">
 			<option selected disabled hidden>세부 카테고리</option>
-			<option value="quiz">퀴즈</option>
-			<option value="comment">작문/댓글</option>
-			<option value="follow">팔로우/구독</option>
-			<option value="share">공유/초대</option>
-			<option value="proof">인증샷</option>
-			<option value="simple">단순응모</option>
-			<option value="experience">체험단</option>
-			<option value="survey">설문/투표</option>
-			<option value="instant">즉석당첨</option>
-			<option value="join">신규가입</option>
-			<option value="buy">구매/샘플</option>
-			<option value="certainty">100%당첨</option>
-			<option value="first">선착순</option>
-			<option value="check">출석체크</option>
-			<option value="download">앱설치</option>
-			<option value="contest">공모전</option>
-			<option value="live">라이브방송</option>
-			<option value="etc">기타</option>
+			<option value="퀴즈">퀴즈</option>
+			<option value="작문/댓글">작문/댓글</option>
+			<option value="팔로우/구독">팔로우/구독</option>
+			<option value="공유/초대">공유/초대</option>
+			<option value="인증샷">인증샷</option>
+			<option value="단순응모">단순응모</option>
+			<option value="체험단">체험단</option>
+			<option value="설문/투표">설문/투표</option>
+			<option value="즉석당첨">즉석당첨</option>
+			<option value="신규가입">신규가입</option>
+			<option value="구매/샘플">구매/샘플</option>
+			<option value="100%당첨">100%당첨</option>
+			<option value="선착순">선착순</option>
+			<option value="출석체크">출석체크</option>
+			<option value="앱설치">앱설치</option>
+			<option value="공모전">공모전</option>
+			<option value="라이브방송">라이브방송</option>
+			<option value="기타">기타</option>
 		</select>
 	</div>
 	<div class="half-box">

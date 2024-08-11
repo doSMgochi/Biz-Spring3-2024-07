@@ -119,7 +119,5 @@
 		<div class="cloud type-3"></div>
 		<div class="cloud type-4"></div>
 		<div class="cloud type-5"></div>
-		<!-- png 투명 부분은 커서가 안 올라오게 할 수 있으려나? -->
-		<!-- 기억 북마크에 넣어둔 reference 참고해서 버튼 누를 때 폭죽 터지는 효과 넣기 (딜레이 후 페이지가 넘어갈지 고민) -->
 	</section>
 </body>
