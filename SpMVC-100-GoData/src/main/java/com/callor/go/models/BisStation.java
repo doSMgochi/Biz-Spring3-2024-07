@@ -6,19 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
+//@Getter
+//@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 public class BisStation {
-	private String station_num;//	레코드 구분
-	private String busstop_id;//	정류소 id
-	private String busstop_name;//	정류소 명(국문)
-	private String name_e;//		정류소 명(영문)
-	private String longitude;//		위도
-	private String latitude;// 		경도
-	private String ars_id;// 		다음정류장
-	private String next_busstop;// 	ARS 번호
+	public String STATION_NUM;//	레코드 구분
+	public String BUSSTOP_ID;//	정류소 id
+	public String BUSSTOP_NAME;//	정류소 명(국문)
+	public String NAME_E;//		정류소 명(영문)
+	public String LONGITUDE;//		위도
+	public String LATITUDE;// 		경도
+	public String ARS_ID;// 		다음정류장
+	public String NEXT_BUSSTOP;// 	ARS 번호
 
 }
