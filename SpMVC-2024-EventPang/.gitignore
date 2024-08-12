@@ -146,6 +146,3 @@ package-lock.json
 
 # ETC
 .bak
-
-# SEC
-DataGoConfig.*
