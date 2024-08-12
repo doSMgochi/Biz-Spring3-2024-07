@@ -9,6 +9,9 @@
 		<c:if test="${not empty MSG}">
 			<h4>${MSG }</h4>
 		</c:if>
+		<c:if test="${not empty QUIT_MSG}">
+			<h4>${QUIT_MSG }</h4>
+		</c:if>
 		<div>
 			<input type="text" name="user_id" placeholder="아이디"
 				autocomplete="off" /> <span style="display: none;"></span>

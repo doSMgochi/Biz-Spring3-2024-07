@@ -402,7 +402,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const INPUT_INDEX = {
       USER_ID: 0,
       CURRENT_PASSWORD: 1,
-      NEW_PASSWORD: 2,
       NICK: 3,
       EMAIL: 4,
       BIRTH: 5,
@@ -413,7 +412,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const ERROR_MESSAGE = [
       "* 아이디는 필수 항목입니다",
       "* 현재 비밀번호는 필수 항목입니다",
-      "",
       "* 닉네임은 필수 항목입니다",
       "* 이메일은 필수 항목입니다",
       "* 생년월일은 필수 항목입니다",

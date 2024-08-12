@@ -77,5 +77,8 @@
 		<div>
 			<input type="button" value="정보수정" />
 		</div>
+		<div>
+			<a href="${rootPath }/user/quit">회원탈퇴</a>
+		</div>
 	</form>
 </section>

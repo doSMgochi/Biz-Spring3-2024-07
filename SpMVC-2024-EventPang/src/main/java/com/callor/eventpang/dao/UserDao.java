@@ -12,10 +12,10 @@ public interface UserDao {
 	@Select("SELECT * FROM tbl_user")
 	public List<UserVO> selectAll();
 	
-	@Select("SELECT * FROM tbl_user WHERE USER_ID = #{user_id}")
+	@Select("SELECT * FROM tbl_user WHERE USER_ID = #{id}")
 	public UserVO findById(String id);
-	
-	@Delete("DELETE FROM tbl_user WHERE USER_ID = #{user_id")
+
+	@Delete("DELETE FROM tbl_user WHERE USER_ID = #{id}")
 	public int deleteById(String id);
 	
 	public int update(UserVO userVO);

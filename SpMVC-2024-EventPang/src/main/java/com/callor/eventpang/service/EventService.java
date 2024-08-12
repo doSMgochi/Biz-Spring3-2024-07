@@ -1,5 +1,6 @@
 package com.callor.eventpang.service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -21,5 +22,16 @@ public interface EventService {
 	public List<EventVO> findEventsByCategory(String category);
 	
 	public Map<String, String> splitCategory(String category);
+	
 	public String formatDateTime(Date date);
+	
+	public List<EventVO> findBySearch(String search);
+	
+	public List<EventVO> findEventsByWriteTimeBetween(LocalDateTime start, LocalDateTime end);
+
+	public List<EventVO> findTop10EventsByViews();
+	
+	public List<EventVO> findEventsByEndTimeBetween(LocalDateTime start, LocalDateTime end);
+
+	public List<EventVO> findEventsByWinningTimeBetween(LocalDateTime start, LocalDateTime end);
 }

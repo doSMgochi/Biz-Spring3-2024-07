@@ -97,7 +97,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login(@RequestParam(required = false, defaultValue = "") String err, Model model) {
+	public String login(@RequestParam(required = false, defaultValue = "") String err, HttpSession httpSession, Model model) {
+		UserVO userVO = (UserVO) httpSession.getAttribute("USER");
+		if (userVO != null) {
+			return "redirect:/"; 
+		}
 		if (err.equalsIgnoreCase("NEED")) {
 			model.addAttribute("MSG", "* 로그인이 필요합니다");
 		}
@@ -122,14 +126,19 @@ public class UserController {
 		return "redirect:/";
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public String delete(@RequestParam(required = false, defaultValue = "") String err, UserVO userVO, Model model) {
+	@RequestMapping(value = "/quit", method = RequestMethod.GET)
+	public String delete(@RequestParam(required = false, defaultValue = "") String err, HttpSession httpSession, Model model) {
+		UserVO userVO = (UserVO) httpSession.getAttribute("USER");
+		if (userVO == null) {
+			return "user/login";
+		}
 		int ret = userService.deleteById(userVO.getUser_id());
 		if (ret < 1) {
-			model.addAttribute("JOIN_MSG", "FAIL");
-			return "user/modify";
+			model.addAttribute("QUIT_MSG", "* 회원 탈퇴에 실패했습니다.");
+			return "user/login";
 		}
-		return "user/login";
+		model.addAttribute("QUIT_MSG", "* 회원 탈퇴에 성공했습니다.");
+		return "redirect:/user/login";
 	}
 
 	@RequestMapping(value = "/check_id", method = RequestMethod.GET)

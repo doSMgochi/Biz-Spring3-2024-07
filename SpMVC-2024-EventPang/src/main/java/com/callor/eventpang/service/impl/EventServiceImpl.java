@@ -1,6 +1,7 @@
 package com.callor.eventpang.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +36,7 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public EventVO findByNum(int evt_num) {
+	     eventDao.updateViews(evt_num);
 		return eventDao.findByNum(evt_num);
 	}
 
@@ -91,5 +93,37 @@ public class EventServiceImpl implements EventService {
 	public String formatDateTime(Date date) {
 	    SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일 E요일", Locale.KOREAN);
 	    return formatter.format(date);
+	}
+
+	@Override
+	public List<EventVO> findBySearch(String search) {
+		List<EventVO> searchEvents = eventDao.findBySearch(search); 
+		return searchEvents;
+	}
+
+	@Override
+	public List<EventVO> findEventsByWriteTimeBetween(LocalDateTime start, LocalDateTime end) {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime oneWeekAgo = now.minusWeeks(1);
+		return eventDao.findEventsByWriteTimeBetween(oneWeekAgo, now);
+	}
+
+	@Override
+	public List<EventVO> findTop10EventsByViews() {
+		return eventDao.findTop10EventsByViews();
+	}
+
+	@Override
+	public List<EventVO> findEventsByEndTimeBetween(LocalDateTime start, LocalDateTime end) {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime oneWeekLater = now.plusWeeks(1);
+		return eventDao.findEventsByEndTimeBetween(now, oneWeekLater);
+	}
+
+	@Override
+	public List<EventVO> findEventsByWinningTimeBetween(LocalDateTime start, LocalDateTime end) {
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime oneWeekLater = now.plusWeeks(1);
+		return eventDao.findEventsByWinningTimeBetween(now, oneWeekLater);
 	}
 }

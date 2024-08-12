@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class HomeController {
-
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home() {
 
@@ -53,4 +53,6 @@ public class HomeController {
 	    }
 	    return result;
 	}
+	
+
 }

@@ -1,5 +1,6 @@
 package com.callor.eventpang.controller;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,13 @@ public class BoardController {
 		super();
 		this.eventService = eventService;
 	}
+	
+	@RequestMapping(value="/search", method = RequestMethod.GET)
+	public String search(String search, Model model) {
+		List<EventVO> events = eventService.findBySearch(search);
+		model.addAttribute("events", events);
+		return "board/search";
+	}
 
 	@RequestMapping(value = "/{category}", method = RequestMethod.GET)
 	public String showEventsByCategory(@PathVariable("category") String category, Model model) {
@@ -54,6 +62,51 @@ public class BoardController {
 	        default:
 	            return "이벤트";
 	    }
+	}
+	
+	@RequestMapping(value = "/events/latest", method = RequestMethod.GET)
+	public String showLatestEvents(Model model) {
+	    LocalDateTime now = LocalDateTime.now();
+	    LocalDateTime oneWeekAgo = now.minusWeeks(1);
+
+	    List<EventVO> latestEvents = eventService.findEventsByWriteTimeBetween(oneWeekAgo, now);
+
+	    model.addAttribute("events", latestEvents);
+	    model.addAttribute("categoryTitle", "최신 이벤트");
+	    return "board/event-list";
+	}
+
+	@RequestMapping(value = "/events/popular", method = RequestMethod.GET)
+	public String showPopularEvents(Model model) {
+	    List<EventVO> popularEvents = eventService.findTop10EventsByViews();
+
+	    model.addAttribute("events", popularEvents);
+	    model.addAttribute("categoryTitle", "인기 이벤트");
+	    return "board/event-list";
+	}
+
+	@RequestMapping(value = "/events/closing-soon", method = RequestMethod.GET)
+	public String showClosingSoonEvents(Model model) {
+	    LocalDateTime now = LocalDateTime.now();
+	    LocalDateTime oneWeekLater = now.plusWeeks(1);
+
+	    List<EventVO> closingSoonEvents = eventService.findEventsByEndTimeBetween(now, oneWeekLater);
+
+	    model.addAttribute("events", closingSoonEvents);
+	    model.addAttribute("categoryTitle", "마감 임박 이벤트");
+	    return "board/event-list";
+	}
+
+	@RequestMapping(value = "/events/announcing-soon", method = RequestMethod.GET)
+	public String showAnnouncingSoonEvents(Model model) {
+	    LocalDateTime now = LocalDateTime.now();
+	    LocalDateTime oneWeekLater = now.plusWeeks(1);
+
+	    List<EventVO> announcingSoonEvents = eventService.findEventsByWinningTimeBetween(now, oneWeekLater);
+
+	    model.addAttribute("events", announcingSoonEvents);
+	    model.addAttribute("categoryTitle", "발표 임박 이벤트");
+	    return "board/event-list";
 	}
 	
 	@RequestMapping(value = "/view/{evt_num}", method = RequestMethod.GET)
@@ -115,16 +168,5 @@ public class BoardController {
 	    model.addAttribute("event", event);
 	    return "board/event-view"; 
 	}
-
-	@RequestMapping(value = "/view", method = RequestMethod.GET)
-	public String view() {
-		return null;
-	}
-	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public String test() {
-		return null;
-	}
-
 
 }

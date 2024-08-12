@@ -56,7 +56,15 @@
 		<button class="save-event">이벤트 북마크</button>
 		<button class="apply-event">이벤트 응모하기</button>
 	</div>
-	<div>댓글</div>
-	<div>${event.evt_recommend }</div>
+	<div class="align-left">
+		<div>댓글 <!-- join 한 recommend 갯수 적어주기 --></div>
+		<div>작성자 : ${sessionScope.USER.user_id }</div>
+		<div>
+			<input class="comment" type="text" placeholder="댓글을 입력하세요">
+		</div>
+		<c:if test="${event.evt_recommend > 1 }">
+		댓글 표시
+		</c:if>
+	</div>
 </div>
 <div class="margin"></div>

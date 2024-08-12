@@ -8,10 +8,10 @@
 			<ul>
 				<li>이벤트
 					<ul>
-						<li><a href="#">최신이벤트</a></li>
-						<li><a href="#">인기이벤트</a></li>
-						<li><a href="#">마감임박</a></li>
-						<li><a href="#">발표임박</a></li>
+						<li><a href="${rootPath }/board/events/latest">최신이벤트</a></li>
+						<li><a href="${rootPath }/board/events/popular">인기이벤트</a></li>
+						<li><a href="${rootPath }/board/events/closing-soon">마감임박</a></li>
+						<li><a href="${rootPath }/board/events/announcing-soon">발표임박</a></li>
 					</ul>
 				</li>
 				<li>글쓰기
