@@ -1,21 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout">
-<section class="main" th:fragment="trashcansSection(region, trashCans)">
-	<label for="citySelect">도시 선택:</label> <select id="citySelect"
-		onchange="onCityChange()">
-		<option value="서울" th:selected="${region.startsWith('서울')}">서울</option>
-		<option value="대구" th:selected="${region.startsWith('대구')}">대구</option>
-		<option value="부산" th:selected="${region.startsWith('부산')}">부산</option>
-		<option value="대전" th:selected="${region.startsWith('대전')}">대전</option>
-		<option value="광주" th:selected="${region.startsWith('광주')}">광주</option>
-		<option value="인천" th:selected="${region.startsWith('인천')}">인천</option>
-	</select> <label for="districtSelect">구 선택:</label> <select id="districtSelect"
-		onchange="onRegionChange()"></select>
-		<input type="text" th:placeholder="${'위치를 검색하세요'}" />
-	<h2 th:text="${region} + ' 쓰레기통'"></h2>
+<section class="main">
+	<h2 id="regionTitle">쓰레기통 정보</h2>
 	<div class="table-container">
-		<table class="list">
+		<div th:if="${noResults}">
+			<p>검색 결과가 없습니다.</p>
+		</div>
+		<table class="list" th:if="${not(noResults)}">
 			<thead>
 				<tr>
 					<th>번호</th>
@@ -25,7 +17,7 @@
 					<th>쓰레기통 종류</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="trashCansTableBody">
 				<tr th:each="bin : ${trashCans}">
 					<td th:text="${bin.id}"></td>
 					<td th:text="${bin.location}"></td>

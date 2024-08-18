@@ -7,22 +7,36 @@
 <title>어디든</title>
 <link rel="stylesheet" href="../../static/css/main.css"
 	th:href="@{/static/css/main.css}" />
-<script th:inline="javascript">
-	// thymeleaf 에서 제공하는 context.rootPath 를 JS 에서 사용할 수 있도록 변수 선언
-	const rootPath = /*[[@{/eartheden/}]]*/'';
-</script>
-<script th:inline="javascript" src="../../static/js/main.js"
-	th:src="@{/static/js/main.js}"></script>
 </head>
 <body>
 	<header class="main">
 		<h1>어디든</h1>
 	</header>
-	<section
-		th:replace="~{fragments/trashcans :: trashcansSection(region=${region}, trashCans=${trashCans})}"></section>
-	<section
-		th:replace="~{fragments/restrooms :: restroomsSection(region=${region}, restrooms=${restrooms})}"></section>
-	<section
-		th:replace="~{fragments/wifis :: wifisSection(region=${region}, wifis=${wifis})}"></section>
+	<section class="search">
+		<label for="citySelect">도시 선택:</label> <select id="citySelect">
+			<option value="">도시 선택</option>
+			<!-- 기본값 -->
+			<option value="서울">서울</option>
+			<option value="대구">대구</option>
+			<option value="부산">부산</option>
+			<option value="대전">대전</option>
+			<option value="광주">광주</option>
+			<option value="인천">인천</option>
+		</select> <label for="districtSelect">구 선택:</label> <select id="districtSelect">
+			<option value="">구 선택</option>
+			<!-- 기본값 -->
+		</select>
+		<button id="searchButton">검색</button>
+
+		<br>
+		<br> <label for="searchInput">검색어 입력:</label> <input type="text"
+			id="searchInput" placeholder="위치를 검색하세요" />
+	</section>
+	<section id="resultSection"></section>
+
+	<script th:inline="javascript">
+		const rootPath = /*[[${rootPath}]]*/'/eartheden/';
+	</script>
+	<script src="../../static/js/main.js" th:src="@{/static/js/main.js}"></script>
 </body>
 </html>
