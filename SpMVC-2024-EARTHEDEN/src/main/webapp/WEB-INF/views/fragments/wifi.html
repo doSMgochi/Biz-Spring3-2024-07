@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout">
+<section class="main" th:fragment="wifisSection(region, wifis)">
+	<label for="citySelect">도시 선택:</label> <select id="citySelect"
+		onchange="onCityChange()">
+		<option value="강원" th:selected="${region.startsWith('강원')}">강원</option>
+		<option value="경기" th:selected="${region.startsWith('경기')}">경기</option>
+		<option value="경남" th:selected="${region.startsWith('경남')}">경남</option>
+		<option value="경북" th:selected="${region.startsWith('경북')}">경북</option>
+		<option value="광주" th:selected="${region.startsWith('광주')}">광주</option>
+		<option value="대구" th:selected="${region.startsWith('대구')}">대구</option>
+		<option value="대전" th:selected="${region.startsWith('대전')}">대전</option>
+		<option value="부산" th:selected="${region.startsWith('부산')}">부산</option>
+		<option value="서울" th:selected="${region.startsWith('서울')}">서울</option>
+		<option value="세종" th:selected="${region.startsWith('세종')}">세종</option>
+		<option value="울산" th:selected="${region.startsWith('울산')}">울산</option>
+		<option value="인천" th:selected="${region.startsWith('인천')}">인천</option>
+		<option value="전남" th:selected="${region.startsWith('전남')}">전남</option>
+		<option value="전북" th:selected="${region.startsWith('전북')}">전북</option>
+		<option value="제주" th:selected="${region.startsWith('제주')}">제주</option>
+		<option value="충남" th:selected="${region.startsWith('충남')}">충남</option>
+		<option value="충북" th:selected="${region.startsWith('충북')}">충북</option>
+	</select> <label for="districtSelect">구 선택:</label> <select id="districtSelect"
+		onchange="onRegionChange()"></select> <input type="text"
+		th:placeholder="${'위치를 검색하세요'}" />
+	<h2 th:text="${region} + ' WiFi 정보'"></h2>
+	<div class="table-container">
+		<table class="list">
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>설치 장소명</th>
+					<th>WiFi SSID</th>
+					<th>위도</th>
+					<th>경도</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="wifi : ${wifis}">
+					<td th:text="${wifi.number}"></td>
+					<td th:text="${wifi.installationPlaceName}"></td>
+					<td th:text="${wifi.wifiSSID}"></td>
+					<td th:text="${wifi.latitude}"></td>
+					<td th:text="${wifi.longitude}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</section>
+</html>
