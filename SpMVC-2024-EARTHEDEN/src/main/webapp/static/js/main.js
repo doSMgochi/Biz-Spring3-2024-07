@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchButton = document.getElementById("searchButton");
   const resultSection = document.getElementById("resultSection");
 
+  const modal = document.getElementById("modal");
+  const modalResultSection = document.getElementById("modalResultSection");
+  const closeModal = document.getElementsByClassName("close")[0];
+
   const districts = {
     서울: [
       "전체",
@@ -43,21 +47,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const onCityChange = () => {
     const city = citySelect.value;
-    console.log("City selected:", city); // 도시 선택 확인
-    districtSelect.innerHTML = '<option value="">구 선택</option>'; // 초기화
+    districtSelect.innerHTML = '<option value="">구 선택</option>';
     if (city) {
       const options = districts[city].map((district) => `<option value="${district}">${district}</option>`).join("");
       districtSelect.innerHTML += options;
     }
-    console.log("District options updated:", districtSelect.innerHTML); // 구 옵션 업데이트 확인
+  };
+
+  const openModal = (content) => {
+    modalResultSection.innerHTML = content;
+    modal.style.display = "block";
+  };
+
+  const closeModalHandler = () => {
+    modal.style.display = "none";
   };
 
   const onSearch = () => {
     const city = citySelect.value;
     const district = districtSelect.value;
-
-    console.log("Selected city:", city);
-    console.log("Selected district:", district);
 
     if (!city || !district) {
       alert("도시와 구를 모두 선택하세요.");
@@ -67,19 +75,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const region = encodeURIComponent(`${city} ${district}`);
     const url = `${rootPath.endsWith("/") ? rootPath : rootPath + "/"}search?region=${region}`;
 
-    console.log("Fetch URL:", url);
-
     fetch(url)
       .then((response) => {
         if (!response.ok) throw new Error("Network response was not ok.");
         return response.text();
       })
       .then((html) => {
-        resultSection.innerHTML = html;
+        openModal(html);
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
-        resultSection.innerHTML = `<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>`;
+        openModal("<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>");
       });
   };
 
@@ -99,11 +105,11 @@ document.addEventListener("DOMContentLoaded", () => {
           return response.text();
         })
         .then((html) => {
-          resultSection.innerHTML = html;
+          openModal(html);
         })
         .catch((error) => {
           console.error("There was a problem with the fetch operation:", error);
-          resultSection.innerHTML = `<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>`;
+          openModal("<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>");
         });
     }
   };
@@ -111,6 +117,13 @@ document.addEventListener("DOMContentLoaded", () => {
   citySelect.addEventListener("change", onCityChange);
   searchButton.addEventListener("click", onSearch);
   searchInput.addEventListener("keydown", onEnterSearch);
+  closeModal.addEventListener("click", closeModalHandler);
 
-  onCityChange(); // 초기 로드 시 구 목록 설정
+  window.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      closeModalHandler();
+    }
+  });
+
+  onCityChange();
 });

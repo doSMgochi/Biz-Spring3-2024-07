@@ -10,19 +10,13 @@
 		<table class="list" th:if="${not(noResults)}">
 			<thead>
 				<tr>
-					<th>번호</th>
 					<th>위치</th>
-					<th>위도</th>
-					<th>경도</th>
 					<th>쓰레기통 종류</th>
 				</tr>
 			</thead>
 			<tbody id="trashCansTableBody">
 				<tr th:each="bin : ${trashCans}">
-					<td th:text="${bin.id}"></td>
 					<td th:text="${bin.location}"></td>
-					<td th:text="${bin.latitude}"></td>
-					<td th:text="${bin.longitude}"></td>
 					<td th:text="${bin.binType}"></td>
 				</tr>
 			</tbody>

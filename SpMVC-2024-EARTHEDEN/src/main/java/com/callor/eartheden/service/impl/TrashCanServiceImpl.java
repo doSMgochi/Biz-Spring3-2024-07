@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 
@@ -19,23 +21,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class TrashCanServiceImpl implements TrashCanService {
-
+	
+	private static final Logger logger = LoggerFactory.getLogger(TrashCanServiceImpl.class);
 	private final Map<String, List<TrashCanVO>> cachedTrashCans = new HashMap<>();
 	private final ResourceLoader resourceLoader;
 	private final ObjectMapper mapper;
-	private final ServletContext servletContext; // ServletContext 추가
+	private final ServletContext servletContext;
 
 	public TrashCanServiceImpl(ResourceLoader resourceLoader, ServletContext servletContext) throws IOException {
 		this.resourceLoader = resourceLoader;
 		this.mapper = new ObjectMapper();
-		this.servletContext = servletContext; // 주입된 ServletContext 저장
+		this.servletContext = servletContext;
 		loadAllTrashCans();
 		System.out.println("Trash cans loaded: " + cachedTrashCans.size() + " regions.");
-
-		System.out.println("Cached trash cans:");
-		cachedTrashCans.forEach((key, value) -> {
-			System.out.println("File: " + key + " - Region: " + (value.isEmpty() ? "None" : value.get(0).getRegion()));
-		});
 	}
 
 	private void loadAllTrashCans() throws IOException {
@@ -55,24 +53,15 @@ public class TrashCanServiceImpl implements TrashCanService {
 
 	private List<TrashCanVO> loadTrashCansFromFile(String fileName) {
 		try {
-			// WebApp의 경로에서 리소스를 로드하기 위해 'file:' 접두사를 사용
 			String resourcePath = "file:" + servletContext.getRealPath("/static/json/") + fileName;
 			System.out.println("Loading resource from path: " + resourcePath);
 
-			// ResourceLoader로 파일 로드
 			Resource resource = resourceLoader.getResource(resourcePath);
 			List<TrashCanVO> trashCans = mapper.readValue(resource.getInputStream(),
 					new TypeReference<List<TrashCanVO>>() {
 					});
 
-			// 파일 이름에서 지역명 추출
-			String region = fileName.replace("쓰레기통설치정보", "").replace(".json", "").trim();
-			System.out.println("Extracted region from file name: " + region);
-
-			// 각 쓰레기통 객체에 지역명을 설정
-			trashCans.forEach(trashCan -> trashCan.setRegion(region));
-
-			System.out.println("Successfully parsed file: " + fileName + ", Region: " + region);
+			System.out.println("Successfully parsed file: " + fileName);
 			return trashCans;
 		} catch (IOException e) {
 			System.err.println("Error loading file: " + fileName + " - " + e.getMessage());
@@ -82,24 +71,46 @@ public class TrashCanServiceImpl implements TrashCanService {
 
 	@Override
 	public List<TrashCanVO> getTrashCansByRegion(String region, String rootPath) {
-		System.out.println("Filtering by region: " + region);
-		cachedTrashCans.values().forEach(list -> {
-			list.forEach(trashCan -> System.out.println("Loaded trash can region: " + trashCan.getRegion()));
-		});
-		List<TrashCanVO> filteredList = cachedTrashCans.values().stream().flatMap(List::stream)
-				.filter(trashCan -> trashCan.getRegion() != null && trashCan.getRegion().equalsIgnoreCase(region))
-				.collect(Collectors.toList());
-		System.out.println("Found " + filteredList.size() + " trash cans for region: " + region);
-		return filteredList;
+	    logger.info("getTrashCansByRegion called with region: {}", region);
+
+	    List<TrashCanVO> filteredList;
+	    
+	    if ("서울 전체".equalsIgnoreCase(region) || "광주 전체".equalsIgnoreCase(region)) {
+	        // 서울 또는 광주의 전체 데이터를 반환 (모든 관련 파일 로드)
+	        filteredList = cachedTrashCans.values().stream()
+	                                      .flatMap(List::stream)
+	                                      .filter(trashCan -> trashCan.getRegion() != null && trashCan.getRegion().startsWith(region.replace(" 전체", "")))
+	                                      .collect(Collectors.toList());
+	        logger.info("Returning all trash cans for region: {}", region);
+	    } else if (region.endsWith("전체")) {
+	        // 예: 대구 전체 -> 대구로 시작하는 모든 데이터를 반환
+	        String city = region.replace(" 전체", "");
+	        filteredList = cachedTrashCans.values().stream()
+	                                      .flatMap(List::stream)
+	                                      .filter(trashCan -> trashCan.getRegion() != null && trashCan.getRegion().startsWith(city))
+	                                      .collect(Collectors.toList());
+	        logger.info("Returning all trash cans for city: {}", city);
+	    } else {
+	        // 특정 지역 (구) 선택 시 해당 지역 데이터만 반환
+	        filteredList = cachedTrashCans.values().stream()
+	                                      .flatMap(List::stream)
+	                                      .filter(trashCan -> trashCan.getRegion() != null && trashCan.getRegion().equalsIgnoreCase(region))
+	                                      .collect(Collectors.toList());
+	        logger.info("Found {} trash cans for region: {}", filteredList.size(), region);
+	    }
+
+	    return filteredList;
 	}
 
 	@Override
 	public List<TrashCanVO> searchTrashCans(String query, String rootPath) {
-		System.out.println("Searching for query: " + query);
-		List<TrashCanVO> filteredList = cachedTrashCans.values().stream().flatMap(List::stream)
-				.peek(trashCan -> System.out.println("Checking location: " + trashCan.getLocation()))
-				.filter(trashCan -> trashCan.getLocation().contains(query)).collect(Collectors.toList());
-		System.out.println("Found " + filteredList.size() + " trash cans matching query: " + query);
+		logger.info("searchTrashCans called with query: {}", query);
+		List<TrashCanVO> filteredList = cachedTrashCans.values().stream().flatMap(List::stream).filter(trashCan -> {
+			boolean matches = trashCan.getLocation().contains(query);
+			logger.debug("Checking location: {}, matches: {}", trashCan.getLocation(), matches);
+			return matches;
+		}).collect(Collectors.toList());
+		logger.info("Found {} trash cans matching query: {}", filteredList.size(), query);
 		return filteredList;
 	}
 }

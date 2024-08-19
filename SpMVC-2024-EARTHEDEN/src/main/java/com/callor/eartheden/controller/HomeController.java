@@ -1,8 +1,6 @@
 package com.callor.eartheden.controller;
 
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +31,7 @@ public class HomeController {
 
     @RequestMapping("/")
     public String home(Model model) {
+        logger.info("Home page requested");
         model.addAttribute("region", "서울");
         model.addAttribute("rootPath", servletContext.getContextPath());
         return "home";
@@ -48,14 +47,13 @@ public class HomeController {
 
         try {
             if (search != null && !search.isEmpty()) {
-                // 검색어가 입력된 경우
+                logger.info("Performing search with query: {}", search);
                 trashCans = trashCanService.searchTrashCans(search, servletContext.getContextPath());
-                logger.info("Search results found: {}", trashCans.size());
+                logger.info("Search returned {} results", trashCans.size());
             } else if (region != null && !region.isEmpty()) {
-                // 지역명이 입력된 경우
-                String decodedRegion = URLDecoder.decode(region, StandardCharsets.UTF_8.toString());
-                trashCans = trashCanService.getTrashCansByRegion(decodedRegion, servletContext.getContextPath());
-                logger.info("Region results found: {}", trashCans.size());
+                logger.info("Filtering by region: {}", region);
+                trashCans = trashCanService.getTrashCansByRegion(region, servletContext.getContextPath());
+                logger.info("Filtering by region returned {} results", trashCans.size());
             } else {
                 logger.warn("No search or region specified, returning empty list.");
             }
@@ -70,14 +68,13 @@ public class HomeController {
         }
 
         if (trashCans.isEmpty()) {
-            model.addAttribute("noResults", true); // 검색 결과가 없는 경우
-            logger.info("No results found for the given search criteria.");
+            logger.info("No results found for the given criteria.");
+            model.addAttribute("noResults", true);
         } else {
-            model.addAttribute("noResults", false); // 검색 결과가 있는 경우
+            model.addAttribute("noResults", false);
             model.addAttribute("trashCans", trashCans);
-            logger.info("Returning {} search results.", trashCans.size());
         }
-// 코드가 상경하는 문제 해결해야함
-        return "fragments/trashcans"; 
+
+        return "fragments/trashcans";
     }
 }
