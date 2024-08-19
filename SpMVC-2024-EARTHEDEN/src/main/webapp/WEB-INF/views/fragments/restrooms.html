@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout">
 <section class="main" th:fragment="restroomsSection(region, restrooms)">
-	 <h2 th:text="${roadAddressPart1} + ' ' + ${roadAddressPart2} + ' 화장실 정보'"></h2>
+	 <h2 th:text="${searchKeyword != null ? searchKeyword + ' 검색 정보' : roadAddressPart1 + ' ' + roadAddressPart2 + ' 화장실 정보'}"></h2>
 	<div class="table-container">
 		<table class="list">
 			<thead>

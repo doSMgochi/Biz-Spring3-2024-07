@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const ensureSlash = (path) => (path.endsWith("/") ? path : path + "/");
 
   const rootPathWithSlash = ensureSlash(rootPath);
+
   // 시군구 데이터
   const districts = {
     서울: [
@@ -246,23 +247,41 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDistrictOptions(trashcanCitySelect, trashcanDistrictSelect, districts);
   });
 
-  trashcanSearchButton.addEventListener("click", () => {
+  // 지역 검색
+  trashcanCityDistrictSearchButton.addEventListener("click", () => {
     const city = trashcanCitySelect.value;
     const district = trashcanDistrictSelect.value;
-    const query = trashcanSearchInput.value.trim();
 
     if (!city || !district) {
       alert("시/도 및 시/군/구를 선택해 주세요.");
       return;
     }
 
-    let url = `${rootPathWithSlash}trashcan-search`;
+    let url = `${rootPathWithSlash}trashcan-search?region=${encodeURIComponent(city + " " + district)}`;
 
-    if (query) {
-      url += `?search=${encodeURIComponent(query)}`;
-    } else if (city && district) {
-      url += `?region=${encodeURIComponent(city + " " + district)}`;
+    fetch(url)
+      .then((response) => response.text())
+      .then((html) => {
+        trashcanModalResultSection.innerHTML = html;
+        trashcanModal.style.display = "block";
+      })
+      .catch((error) => {
+        console.error("Error fetching trashcan data:", error);
+        trashcanModalResultSection.innerHTML = "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+        trashcanModal.style.display = "block";
+      });
+  });
+
+  // 검색어로 검색
+  trashcanSearchButton.addEventListener("click", () => {
+    const query = trashcanSearchInput.value.trim();
+
+    if (!query) {
+      alert("검색어를 입력해 주세요.");
+      return;
     }
+
+    let url = `${rootPathWithSlash}trashcan-search?search=${encodeURIComponent(query)}`;
 
     fetch(url)
       .then((response) => response.text())
@@ -283,6 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 화장실 검색
   const restroomCitySelect = document.getElementById("restroomCitySelect");
   const restroomDistrictSelect = document.getElementById("restroomDistrictSelect");
+  const restroomCityDistrictSearchButton = document.getElementById("restroomCityDistrictSearchButton");
   const restroomSearchButton = document.getElementById("restroomSearchButton");
   const restroomSearchInput = document.getElementById("restroomSearchInput");
   const restroomModal = document.getElementById("restroomModal");
@@ -293,23 +313,41 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDistrictOptions(restroomCitySelect, restroomDistrictSelect, districts);
   });
 
-  restroomSearchButton.addEventListener("click", () => {
+  // 지역 검색
+  restroomCityDistrictSearchButton.addEventListener("click", () => {
     const city = restroomCitySelect.value;
     const district = restroomDistrictSelect.value;
-    const query = restroomSearchInput.value.trim();
 
     if (!city || !district) {
       alert("시/도 및 시/군/구를 선택해 주세요.");
       return;
     }
 
-    let url = `${rootPathWithSlash}restroom-search`;
+    let url = `${rootPathWithSlash}restroom-search?roadAddressPart1=${encodeURIComponent(city)}&roadAddressPart2=${encodeURIComponent(district)}`;
 
-    if (query) {
-      url += `?search=${encodeURIComponent(query)}`;
-    } else if (city && district) {
-      url += `?roadAddressPart1=${encodeURIComponent(city)}&roadAddressPart2=${encodeURIComponent(district)}`;
+    fetch(url)
+      .then((response) => response.text())
+      .then((html) => {
+        restroomModalResultSection.innerHTML = html;
+        restroomModal.style.display = "block";
+      })
+      .catch((error) => {
+        console.error("Error fetching restroom data:", error);
+        restroomModalResultSection.innerHTML = "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+        restroomModal.style.display = "block";
+      });
+  });
+
+  // 검색어로 검색
+  restroomSearchButton.addEventListener("click", () => {
+    const query = restroomSearchInput.value.trim();
+
+    if (!query) {
+      alert("검색어를 입력해 주세요.");
+      return;
     }
+
+    let url = `${rootPathWithSlash}restroom-search?search=${encodeURIComponent(query)}`;
 
     fetch(url)
       .then((response) => response.text())
@@ -330,6 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 와이파이 검색
   const wifiCitySelect = document.getElementById("wifiCitySelect");
   const wifiDistrictSelect = document.getElementById("wifiDistrictSelect");
+  const wifiCityDistrictSearchButton = document.getElementById("wifiCityDistrictSearchButton");
   const wifiSearchButton = document.getElementById("wifiSearchButton");
   const wifiSearchInput = document.getElementById("wifiSearchInput");
   const wifiModal = document.getElementById("wifiModal");
@@ -340,23 +379,43 @@ document.addEventListener("DOMContentLoaded", () => {
     updateDistrictOptions(wifiCitySelect, wifiDistrictSelect, districts);
   });
 
-  wifiSearchButton.addEventListener("click", () => {
+  // 지역 검색
+  wifiCityDistrictSearchButton.addEventListener("click", () => {
     const city = wifiCitySelect.value;
     const district = wifiDistrictSelect.value;
-    const query = wifiSearchInput.value.trim();
 
     if (!city || !district) {
       alert("시/도 및 시/군/구를 선택해 주세요.");
       return;
     }
 
-    let url = `${rootPathWithSlash}wifi-search`;
+    let url = `${rootPathWithSlash}wifi-search?installationProvince=${encodeURIComponent(city)}&installationCityCounty=${encodeURIComponent(
+      district
+    )}`;
 
-    if (query) {
-      url += `?search=${encodeURIComponent(query)}`;
-    } else if (city && district) {
-      url += `?installationProvince=${encodeURIComponent(city)}&installationCityCounty=${encodeURIComponent(district)}`;
+    fetch(url)
+      .then((response) => response.text())
+      .then((html) => {
+        wifiModalResultSection.innerHTML = html;
+        wifiModal.style.display = "block";
+      })
+      .catch((error) => {
+        console.error("Error fetching wifi data:", error);
+        wifiModalResultSection.innerHTML = "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+        wifiModal.style.display = "block";
+      });
+  });
+
+  // 검색어로 검색
+  wifiSearchButton.addEventListener("click", () => {
+    const query = wifiSearchInput.value.trim();
+
+    if (!query) {
+      alert("검색어를 입력해 주세요.");
+      return;
     }
+
+    let url = `${rootPathWithSlash}wifi-search?search=${encodeURIComponent(query)}`;
 
     fetch(url)
       .then((response) => response.text())
@@ -373,4 +432,64 @@ document.addEventListener("DOMContentLoaded", () => {
 
   wifiCloseModal.addEventListener("click", () => modalCloseHandler(wifiModal));
   window.addEventListener("click", (event) => modalOutsideClickHandler(event, wifiModal));
+  console.log("지도 초기화 시작"); // 지도 초기화 확인
+  const mapContainer = document.getElementById("map"); // map 컨테이너
+  console.log("mapContainer:", mapContainer); // mapContainer가 제대로 선택되었는지 확인
+
+  const mapOption = {
+    center: new kakao.maps.LatLng(37.5665, 126.978), // 초기 지도 중심 좌표
+    level: 4, // 초기 확대 수준
+  };
+
+  const map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다.
+  console.log("지도 초기화 완료", map); // 지도 객체 확인
+
+  const marker = new kakao.maps.Marker({
+    position: new kakao.maps.LatLng(37.5665, 126.978), // 초기 마커 위치
+    map: map, // 마커가 표시될 지도
+  });
+  console.log("마커 초기화 완료", marker); // 마커 객체 확인
+  const testMapBox = document.getElementById("testMapBox");
+  testMapBox.addEventListener("click", function (event) {
+    console.log("테스트 박스 클릭");
+
+    const lat = 37.5665; // 임의의 위도
+    const lng = 126.978; // 임의의 경도
+    const coords = new kakao.maps.LatLng(lat, lng);
+
+    marker.setPosition(coords); // 마커 위치 설정
+    map.setCenter(coords); // 지도 중심 설정
+
+    // 지도 컨테이너의 위치를 설정하여 지도를 보여줍니다.
+    mapContainer.style.display = "block";
+    mapContainer.style.left = event.pageX + "px";
+    mapContainer.style.top = event.pageY + "px";
+  });
+  // 이벤트 위임을 통해 마우스 오버 이벤트 처리
+  resultSection.addEventListener("mouseover", function (event) {
+    const row = event.target.closest("tr[data-lat][data-lng]");
+    if (row) {
+      const lat = parseFloat(row.getAttribute("data-lat"));
+      const lng = parseFloat(row.getAttribute("data-lng"));
+      console.log("마우스 오버 - 위도:", lat, "경도:", lng);
+
+      const coords = new kakao.maps.LatLng(lat, lng);
+
+      marker.setPosition(coords); // 마커 위치 설정
+      map.setCenter(coords); // 지도 중심 설정
+
+      mapContainer.style.display = "block";
+      mapContainer.style.left = event.pageX + "px";
+      mapContainer.style.top = event.pageY + "px";
+    }
+  });
+
+  // 마우스 아웃 이벤트
+  resultSection.addEventListener("mouseout", function (event) {
+    const row = event.target.closest("tr[data-lat][data-lng]");
+    if (row) {
+      mapContainer.style.display = "none"; // 마우스가 나가면 지도 숨기기
+      console.log("마우스 아웃 - 지도 숨김");
+    }
+  });
 });

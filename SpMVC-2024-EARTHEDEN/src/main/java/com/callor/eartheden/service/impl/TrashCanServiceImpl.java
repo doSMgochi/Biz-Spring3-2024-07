@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletContext;
 
@@ -22,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class TrashCanServiceImpl implements TrashCanService {
 	
-	private static final Logger logger = LoggerFactory.getLogger(TrashCanServiceImpl.class);
 	private final Map<String, List<TrashCanVO>> cachedTrashCans = new HashMap<>();
 	private final ResourceLoader resourceLoader;
 	private final ObjectMapper mapper;
@@ -46,21 +43,18 @@ public class TrashCanServiceImpl implements TrashCanService {
 		for (String fileName : fileNames) {
 			List<TrashCanVO> trashCans = loadTrashCansFromFile(fileName);
 			cachedTrashCans.put(fileName, trashCans);
-			System.out.println("Loaded " + trashCans.size() + " trash cans from file: " + fileName);
 		}
 	}
 
 	private List<TrashCanVO> loadTrashCansFromFile(String fileName) {
 		try {
 			String resourcePath = "file:" + servletContext.getRealPath("/static/json/") + fileName;
-			System.out.println("Loading resource from path: " + resourcePath);
 
 			Resource resource = resourceLoader.getResource(resourcePath);
 			List<TrashCanVO> trashCans = mapper.readValue(resource.getInputStream(),
 					new TypeReference<List<TrashCanVO>>() {
 					});
 
-			System.out.println("Successfully parsed file: " + fileName);
 			return trashCans;
 		} catch (IOException e) {
 			System.err.println("Error loading file: " + fileName + " - " + e.getMessage());
@@ -70,7 +64,6 @@ public class TrashCanServiceImpl implements TrashCanService {
 
 	@Override
 	public List<TrashCanVO> getTrashCansByRegion(String region, String rootPath) {
-	    logger.info("getTrashCansByRegion called with region: {}", region);
 
 	    List<TrashCanVO> filteredList;
 	    
@@ -79,20 +72,17 @@ public class TrashCanServiceImpl implements TrashCanService {
 	                                      .flatMap(List::stream)
 	                                      .filter(trashCan -> trashCan.getRegion() != null && trashCan.getRegion().startsWith(region.replace(" 전체", "")))
 	                                      .collect(Collectors.toList());
-	        logger.info("Returning all trash cans for region: {}", region);
 	    } else if (region.endsWith("전체")) {
 	        String city = region.replace(" 전체", "");
 	        filteredList = cachedTrashCans.values().stream()
 	                                      .flatMap(List::stream)
 	                                      .filter(trashCan -> trashCan.getRegion() != null && trashCan.getRegion().startsWith(city))
 	                                      .collect(Collectors.toList());
-	        logger.info("Returning all trash cans for city: {}", city);
 	    } else {
 	        filteredList = cachedTrashCans.values().stream()
 	                                      .flatMap(List::stream)
 	                                      .filter(trashCan -> trashCan.getRegion() != null && trashCan.getRegion().equalsIgnoreCase(region))
 	                                      .collect(Collectors.toList());
-	        logger.info("Found {} trash cans for region: {}", filteredList.size(), region);
 	    }
 
 	    return filteredList;
@@ -100,13 +90,10 @@ public class TrashCanServiceImpl implements TrashCanService {
 
 	@Override
 	public List<TrashCanVO> searchTrashCans(String query, String rootPath) {
-		logger.info("searchTrashCans called with query: {}", query);
 		List<TrashCanVO> filteredList = cachedTrashCans.values().stream().flatMap(List::stream).filter(trashCan -> {
 			boolean matches = trashCan.getLocation().contains(query);
-			logger.debug("Checking location: {}, matches: {}", trashCan.getLocation(), matches);
 			return matches;
 		}).collect(Collectors.toList());
-		logger.info("Found {} trash cans matching query: {}", filteredList.size(), query);
 		return filteredList;
 	}
 }
