@@ -13,8 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.callor.eartheden.models.RestroomVO;
 import com.callor.eartheden.models.TrashCanVO;
+import com.callor.eartheden.models.WifiVO;
+import com.callor.eartheden.service.RestroomService;
 import com.callor.eartheden.service.TrashCanService;
+import com.callor.eartheden.service.WifiService;
 
 @Controller
 public class HomeController {
@@ -22,10 +26,14 @@ public class HomeController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     private final TrashCanService trashCanService;
+    private final RestroomService restroomService;
+    private final WifiService wifiService;
     private final ServletContext servletContext;
 
-    public HomeController(TrashCanService trashCanService, ServletContext servletContext) {
+    public HomeController(TrashCanService trashCanService, RestroomService restroomService, WifiService wifiService, ServletContext servletContext) {
         this.trashCanService = trashCanService;
+        this.restroomService = restroomService;
+        this.wifiService = wifiService;
         this.servletContext = servletContext;
     }
 
@@ -37,44 +45,108 @@ public class HomeController {
         return "home";
     }
 
-    @RequestMapping("/search")
-    public String search(@RequestParam(value = "region", required = false) String region,
-                         @RequestParam(value = "search", required = false) String search, Model model) {
-
-        logger.info("Received search request - Region: {}, Search: {}", region, search);
+    @RequestMapping("/trashcan-search")
+    public String trashcanSearch(@RequestParam(value = "region", required = false) String region,
+                                 @RequestParam(value = "search", required = false) String search, Model model) {
 
         List<TrashCanVO> trashCans = Collections.emptyList();
 
         try {
             if (search != null && !search.isEmpty()) {
-                logger.info("Performing search with query: {}", search);
                 trashCans = trashCanService.searchTrashCans(search, servletContext.getContextPath());
-                logger.info("Search returned {} results", trashCans.size());
             } else if (region != null && !region.isEmpty()) {
-                logger.info("Filtering by region: {}", region);
                 trashCans = trashCanService.getTrashCansByRegion(region, servletContext.getContextPath());
-                logger.info("Filtering by region returned {} results", trashCans.size());
-            } else {
-                logger.warn("No search or region specified, returning empty list.");
             }
         } catch (IOException e) {
-            logger.error("I/O error during search operation", e);
             model.addAttribute("errorMessage", "데이터를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.");
-            return "fragments/trashcans";
-        } catch (Exception e) {
-            logger.error("Unexpected error during search operation", e);
-            model.addAttribute("errorMessage", "알 수 없는 오류가 발생했습니다. 다시 시도해 주세요.");
             return "fragments/trashcans";
         }
 
         if (trashCans.isEmpty()) {
-            logger.info("No results found for the given criteria.");
             model.addAttribute("noResults", true);
         } else {
             model.addAttribute("noResults", false);
             model.addAttribute("trashCans", trashCans);
         }
-
+        model.addAttribute("region", region);
         return "fragments/trashcans";
+    }
+
+    @RequestMapping("/restroom-search")
+    public String restroomSearch(@RequestParam(value = "roadAddressPart1", required = false) String roadAddressPart1,
+                                 @RequestParam(value = "roadAddressPart2", required = false) String roadAddressPart2,
+                                 @RequestParam(value = "search", required = false) String search, 
+                                 Model model) {
+
+        logger.info("Received restroom search request with parameters - roadAddressPart1: {}, roadAddressPart2: {}, search: {}",
+                    roadAddressPart1, roadAddressPart2, search);
+
+        List<RestroomVO> restrooms = Collections.emptyList();
+
+        try {
+            if (search != null && !search.isEmpty()) {
+                logger.info("Searching restrooms by query: {}", search);
+                restrooms = restroomService.searchRestrooms(search, servletContext.getContextPath());
+            } else if (roadAddressPart1 != null && !roadAddressPart1.isEmpty() && roadAddressPart2 != null && !roadAddressPart2.isEmpty()) {
+                logger.info("Searching restrooms by road address parts: {} {}", roadAddressPart1, roadAddressPart2);
+                restrooms = restroomService.getRestroomsByRoadAddress(roadAddressPart1, roadAddressPart2, servletContext.getContextPath());
+            }
+        } catch (IOException e) {
+            logger.error("Error occurred while searching restrooms", e);
+            model.addAttribute("errorMessage", "데이터를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            return "fragments/restrooms";
+        }
+
+        if (restrooms.isEmpty()) {
+            logger.info("No results found for the given criteria.");
+            model.addAttribute("noResults", true);
+        } else {
+            logger.info("Found {} restrooms for the given criteria.", restrooms.size());
+            model.addAttribute("noResults", false);
+            model.addAttribute("restrooms", restrooms);
+        }
+        model.addAttribute("roadAddressPart1", roadAddressPart1);
+        model.addAttribute("roadAddressPart2", roadAddressPart2);
+        return "fragments/restrooms";
+    }
+
+    @RequestMapping("/wifi-search")
+    public String wifiSearch(@RequestParam(value = "installationProvince", required = false) String installationProvince,
+                             @RequestParam(value = "installationCityCounty", required = false) String installationCityCounty,
+                             @RequestParam(value = "search", required = false) String search,
+                             Model model) {
+
+        logger.info("WiFi search requested - Province: {}, City/County: {}, Search: {}", installationProvince, installationCityCounty, search);
+
+        List<WifiVO> wifis = Collections.emptyList();
+
+        try {
+            if (search != null && !search.isEmpty()) {
+                wifis = wifiService.searchWifis(search, servletContext.getContextPath());
+                logger.info("Found {} WiFi records for search query '{}'", wifis.size(), search);
+            } else if (installationProvince != null && !installationProvince.isEmpty()
+                    && installationCityCounty != null && !installationCityCounty.isEmpty()) {
+                String location = installationProvince + " " + installationCityCounty;
+                wifis = wifiService.getWifisByInstallationLocation(location, servletContext.getContextPath());
+                logger.info("Found {} WiFi records for location '{}'", wifis.size(), location);
+            }
+        } catch (IOException e) {
+            logger.error("Error occurred while searching WiFis", e);
+            model.addAttribute("errorMessage", "데이터를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요.");
+            return "fragments/wifis";
+        }
+
+        if (wifis.isEmpty()) {
+            logger.info("No WiFi results found for the given criteria.");
+            model.addAttribute("noResults", true);
+        } else {
+            model.addAttribute("noResults", false);
+            model.addAttribute("wifis", wifis);
+        }
+
+        model.addAttribute("installationProvince", installationProvince);
+        model.addAttribute("installationCityCounty", installationCityCounty);
+
+        return "fragments/wifis";
     }
 }

@@ -16,9 +16,11 @@
 	<header class="main">
 		<h1>어디든</h1>
 	</header>
+	<!-- 쓰레기통 검색 -->
 	<section class="search">
-
-		<label for="citySelect">도시 선택:</label> <select id="citySelect">
+		<h2>쓰레기통 검색</h2>
+		<label for="trashcanCitySelect">도시 선택:</label> <select
+			id="trashcanCitySelect">
 			<option value="">도시 선택</option>
 			<option value="서울">서울</option>
 			<option value="대구">대구</option>
@@ -26,21 +28,102 @@
 			<option value="대전">대전</option>
 			<option value="광주">광주</option>
 			<option value="인천">인천</option>
-		</select> <label for="districtSelect">구 선택:</label> <select id="districtSelect">
+		</select> <label for="trashcanDistrictSelect">구 선택:</label> <select
+			id="trashcanDistrictSelect">
 			<option value="">구 선택</option>
 		</select>
 
-		<button id="searchButton">검색</button>
-		<label for="searchInput">검색어 입력:</label> <input type="text"
-			id="searchInput" placeholder="위치를 검색하세요" />
+		<button id="trashcanSearchButton">검색</button>
+		<input type="text" id="trashcanSearchInput" placeholder="위치를 검색하세요" />
+
 		<!-- 모달 구조 추가 -->
-		<div id="modal" class="modal">
+		<div id="trashcanModal" class="modal">
 			<div class="modal-content">
 				<span class="close">&times;</span>
-				<div id="modalResultSection"></div>
+				<div id="trashcanModalResultSection"></div>
 			</div>
 		</div>
 	</section>
+
+	<!-- 화장실 검색 -->
+	<section class="search">
+		<h2>화장실 검색</h2>
+		<label for="restroomCitySelect">도시 선택:</label> <select
+			id="restroomCitySelect">
+			<option value="">도시 선택</option>
+			<option value="강원">강원</option>
+			<option value="경기">경기</option>
+			<option value="경남">경남</option>
+			<option value="경북">경북</option>
+			<option value="광주">광주</option>
+			<option value="대구">대구</option>
+			<option value="대전">대전</option>
+			<option value="부산">부산</option>
+			<option value="서울">서울</option>
+			<option value="세종">세종</option>
+			<option value="울산">울산</option>
+			<option value="인천">인천</option>
+			<option value="전남">전남</option>
+			<option value="전북">전북</option>
+			<option value="제주">제주</option>
+			<option value="충남">충남</option>
+			<option value="충북">충북</option>
+		</select> <label for="restroomDistrictSelect">시군구 선택:</label> <select
+			id="restroomDistrictSelect">
+			<option value="">시군구 선택</option>
+		</select>
+
+		<button id="restroomSearchButton">검색</button>
+		<input type="text" id="restroomSearchInput" placeholder="위치를 검색하세요" />
+
+		<!-- 모달 구조 추가 -->
+		<div id="restroomModal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<div id="restroomModalResultSection"></div>
+			</div>
+		</div>
+	</section>
+
+	<!-- 와이파이 검색 -->
+	<section class="search">
+		<h2>와이파이 검색</h2>
+		<label for="wifiCitySelect">도시 선택:</label> <select id="wifiCitySelect">
+			<option value="">도시 선택</option>
+			<option value="강원">강원</option>
+			<option value="경기">경기</option>
+			<option value="경남">경남</option>
+			<option value="경북">경북</option>
+			<option value="광주">광주</option>
+			<option value="대구">대구</option>
+			<option value="대전">대전</option>
+			<option value="부산">부산</option>
+			<option value="서울">서울</option>
+			<option value="세종">세종</option>
+			<option value="울산">울산</option>
+			<option value="인천">인천</option>
+			<option value="전남">전남</option>
+			<option value="전북">전북</option>
+			<option value="제주">제주</option>
+			<option value="충남">충남</option>
+			<option value="충북">충북</option>
+		</select> <label for="wifiDistrictSelect">시군구 선택:</label> <select
+			id="wifiDistrictSelect">
+			<option value="">시군구 선택</option>
+		</select>
+
+		<button id="wifiSearchButton">검색</button>
+		<input type="text" id="wifiSearchInput" placeholder="위치를 검색하세요" />
+
+		<!-- 모달 구조 추가 -->
+		<div id="wifiModal" class="modal">
+			<div class="modal-content">
+				<span class="close">&times;</span>
+				<div id="wifiModalResultSection"></div>
+			</div>
+		</div>
+	</section>
+
 	<section id="resultSection"></section>
 </body>
 </html>

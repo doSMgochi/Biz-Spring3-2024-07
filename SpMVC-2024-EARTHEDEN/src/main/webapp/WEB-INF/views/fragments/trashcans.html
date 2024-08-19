@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://ultraq.net.nz/thymeleaf/layout">
 <section class="main">
-	<h2 id="regionTitle">쓰레기통 정보</h2>
+	<h2 th:text="${region} + ' 쓰레기통 정보'"></h2>
 	<div class="table-container">
 		<div th:if="${noResults}">
 			<p>검색 결과가 없습니다.</p>
