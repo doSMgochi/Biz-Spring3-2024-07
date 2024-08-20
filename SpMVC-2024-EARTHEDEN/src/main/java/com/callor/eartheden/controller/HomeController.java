@@ -1,16 +1,17 @@
 package com.callor.eartheden.controller;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
-import com.callor.eartheden.config.ApiKeyProvider;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.callor.eartheden.config.ApiKeyProvider;
 import com.callor.eartheden.models.RestroomVO;
 import com.callor.eartheden.models.TrashCanVO;
 import com.callor.eartheden.models.WifiVO;
@@ -46,7 +47,7 @@ public class HomeController {
 	public String trashcanSearch(@RequestParam(value = "region", required = false) String region,
 			@RequestParam(value = "search", required = false) String search, Model model) {
 
-		List<TrashCanVO> trashCans = Collections.emptyList();
+		List<TrashCanVO> trashCans = new ArrayList<>();
 
 		try {
 			if (search != null && !search.isEmpty()) {
@@ -75,7 +76,7 @@ public class HomeController {
 			@RequestParam(value = "roadAddressPart2", required = false) String roadAddressPart2,
 			@RequestParam(value = "search", required = false) String search, Model model) {
 
-		List<RestroomVO> restrooms = Collections.emptyList();
+		List<RestroomVO> restrooms = new ArrayList<>();
 
 		try {
 			if (search != null && !search.isEmpty()) {
@@ -108,7 +109,7 @@ public class HomeController {
 			@RequestParam(value = "installationCityCounty", required = false) String installationCityCounty,
 			@RequestParam(value = "search", required = false) String search, Model model) {
 
-		List<WifiVO> wifis = Collections.emptyList();
+		List<WifiVO> wifis = new ArrayList<>();
 
 		try {
 			if (search != null && !search.isEmpty()) {

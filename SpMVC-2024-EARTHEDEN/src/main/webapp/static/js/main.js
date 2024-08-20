@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
   const ensureSlash = (path) => (path.endsWith("/") ? path : path + "/");
-
   const rootPathWithSlash = ensureSlash(rootPath);
 
   // 시군구 데이터
@@ -211,23 +210,159 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
     충북: ["청주시", "충주시", "제천시", "보은군", "옥천군", "영동군", "증평군", "진천군", "괴산군", "음성군", "단양군"],
   };
+  const mapContainer = document.createElement("div");
+  mapContainer.style.width = "250px";
+  mapContainer.style.height = "250px";
+  mapContainer.style.position = "absolute";
+  mapContainer.style.display = "none";
+  mapContainer.style.zIndex = "1000";
+  document.body.appendChild(mapContainer);
 
-  // 공통 함수: 시군구 옵션 업데이트
+  let map = null;
+  let marker = null;
+
+  function showMap(row, event) {
+    const lat = parseFloat(row.getAttribute("data-lat"));
+    const lng = parseFloat(row.getAttribute("data-lng"));
+
+    if (!isNaN(lat) && !isNaN(lng)) {
+      const position = new kakao.maps.LatLng(lat, lng);
+
+      mapContainer.style.left = `${event.pageX + 10}px`;
+      mapContainer.style.top = `${event.pageY + 10}px`;
+      mapContainer.style.display = "block";
+
+      setTimeout(() => {
+        if (!map) {
+          map = new kakao.maps.Map(mapContainer, {
+            center: position,
+            level: 4,
+          });
+
+          marker = new kakao.maps.Marker({
+            position: position,
+            map: map,
+          });
+        } else {
+          map.setCenter(position);
+          marker.setPosition(position);
+          map.relayout();
+        }
+
+        kakao.maps.event.trigger(map, "resize");
+      }, 100);
+    }
+  }
+
+  function hideMap() {
+    mapContainer.style.display = "none";
+  }
+
+  // Event Delegation으로 모든 페이지에서 지도가 나타나도록 처리
+  document.addEventListener("mouseover", (event) => {
+    const target = event.target.closest("tr[data-lat][data-lng]");
+    if (target) {
+      showMap(target, event);
+    }
+  });
+
+  document.addEventListener("mousemove", (event) => {
+    const target = event.target.closest("tr[data-lat][data-lng]");
+    if (target) {
+      mapContainer.style.left = `${event.pageX + 10}px`;
+      mapContainer.style.top = `${event.pageY + 10}px`;
+    }
+  });
+
+  document.addEventListener("mouseout", (event) => {
+    const target = event.target.closest("tr[data-lat][data-lng]");
+    if (target) {
+      hideMap();
+    }
+  });
+
+  // 커스텀 셀렉트박스
+  document.querySelectorAll(".custom-select").forEach(function (selectElement) {
+    const trigger = selectElement.querySelector(".custom-select-trigger");
+    const optionsContainer = selectElement.querySelector(".custom-options");
+    const options = selectElement.querySelectorAll(".custom-option");
+    const hiddenSelect = selectElement.nextElementSibling;
+
+    // 셀렉트박스 열기
+    trigger.addEventListener("click", function () {
+      selectElement.classList.toggle("open");
+    });
+
+    options.forEach(function (option) {
+      option.addEventListener("click", function () {
+        trigger.querySelector("span").textContent = option.textContent;
+
+        hiddenSelect.value = option.getAttribute("data-value");
+
+        selectElement.classList.remove("open");
+
+        const event = new Event("change");
+        hiddenSelect.dispatchEvent(event);
+      });
+    });
+  });
+
+  // 셀렉트박스 닫기
+  window.addEventListener("click", function (e) {
+    document.querySelectorAll(".custom-select").forEach(function (selectElement) {
+      if (!selectElement.contains(e.target)) {
+        selectElement.classList.remove("open");
+      }
+    });
+  });
+
+  document.addEventListener("click", function (event) {
+    const isOption = event.target.classList.contains("custom-option");
+    const selectWrapper = event.target.closest(".custom-select");
+
+    if (isOption && selectWrapper) {
+      const triggerSpan = selectWrapper.querySelector(".custom-select-trigger span");
+      const hiddenSelect = selectWrapper.nextElementSibling;
+
+      triggerSpan.textContent = event.target.textContent;
+      hiddenSelect.value = event.target.getAttribute("data-value");
+      hiddenSelect.dispatchEvent(new Event("change"));
+
+      selectWrapper.classList.remove("open");
+    }
+
+    document.querySelectorAll(".custom-select").forEach(function (selectElement) {
+      if (!selectElement.contains(event.target)) {
+        selectElement.classList.remove("open");
+      }
+    });
+  });
+  // 시군구 옵션 업데이트
   const updateDistrictOptions = (citySelect, districtSelect, districts) => {
     const city = citySelect.value;
+    const customOptions = districtSelect.previousElementSibling.querySelector(".custom-options");
+    const triggerSpan = districtSelect.previousElementSibling.querySelector(".custom-select-trigger span");
+
     districtSelect.innerHTML = '<option value="">시군구 선택</option>';
+    customOptions.innerHTML = "";
+
     if (city && districts[city]) {
       const options = districts[city].map((district) => `<option value="${district}">${district}</option>`).join("");
       districtSelect.innerHTML += options;
+
+      const customOptionsHtml = districts[city].map((district) => `<span class="custom-option" data-value="${district}">${district}</span>`).join("");
+      customOptions.innerHTML += customOptionsHtml;
+    } else {
+      triggerSpan.textContent = "시군구 선택";
     }
   };
 
-  // 공통 함수: 모달 닫기
+  // 모달 닫기
   const modalCloseHandler = (modal) => {
     modal.style.display = "none";
   };
 
-  // 공통 함수: 모달 바깥 클릭 시 닫기
+  // 모달 바깥 클릭 시 닫기
   const modalOutsideClickHandler = (event, modal) => {
     if (event.target === modal) {
       modal.style.display = "none";
@@ -237,6 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 쓰레기통 검색
   const trashcanCitySelect = document.getElementById("trashcanCitySelect");
   const trashcanDistrictSelect = document.getElementById("trashcanDistrictSelect");
+  const trashcanCityDistrictSearchButton = document.getElementById("trashcanCityDistrictSearchButton");
   const trashcanSearchButton = document.getElementById("trashcanSearchButton");
   const trashcanSearchInput = document.getElementById("trashcanSearchInput");
   const trashcanModal = document.getElementById("trashcanModal");
@@ -433,64 +569,14 @@ document.addEventListener("DOMContentLoaded", () => {
   wifiCloseModal.addEventListener("click", () => modalCloseHandler(wifiModal));
   window.addEventListener("click", (event) => modalOutsideClickHandler(event, wifiModal));
 
-  console.log("지도 초기화 시작"); // 지도 초기화 확인
-  const mapContainer = document.getElementById("map"); // map 컨테이너
-  console.log("mapContainer:", mapContainer); // mapContainer가 제대로 선택되었는지 확인
+  document.addEventListener("scroll", function () {
+    const scrollIcon = document.getElementById("scrollIcon");
+    const isLastPage = window.innerHeight + window.scrollY >= document.body.offsetHeight;
 
-  const mapOption = {
-    center: new kakao.maps.LatLng(37.5665, 126.978), // 초기 지도 중심 좌표
-    level: 4, // 초기 확대 수준
-  };
-
-  const map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다.
-  console.log("지도 초기화 완료", map); // 지도 객체 확인
-
-  const marker = new kakao.maps.Marker({
-    position: new kakao.maps.LatLng(37.5665, 126.978), // 초기 마커 위치
-    map: map, // 마커가 표시될 지도
-  });
-  console.log("마커 초기화 완료", marker); // 마커 객체 확인
-  const testMapBox = document.getElementById("testMapBox");
-  testMapBox.addEventListener("click", function (event) {
-    console.log("테스트 박스 클릭");
-
-    const lat = 37.5665; // 임의의 위도
-    const lng = 126.978; // 임의의 경도
-    const coords = new kakao.maps.LatLng(lat, lng);
-
-    marker.setPosition(coords); // 마커 위치 설정
-    map.setCenter(coords); // 지도 중심 설정
-
-    // 지도 컨테이너의 위치를 설정하여 지도를 보여줍니다.
-    mapContainer.style.display = "block";
-    mapContainer.style.left = event.pageX + "px";
-    mapContainer.style.top = event.pageY + "px";
-  });
-  // 이벤트 위임을 통해 마우스 오버 이벤트 처리
-  resultSection.addEventListener("mouseover", function (event) {
-    const row = event.target.closest("tr[data-lat][data-lng]");
-    if (row) {
-      const lat = parseFloat(row.getAttribute("data-lat"));
-      const lng = parseFloat(row.getAttribute("data-lng"));
-      console.log("마우스 오버 - 위도:", lat, "경도:", lng);
-
-      const coords = new kakao.maps.LatLng(lat, lng);
-
-      marker.setPosition(coords); // 마커 위치 설정
-      map.setCenter(coords); // 지도 중심 설정
-
-      mapContainer.style.display = "block";
-      mapContainer.style.left = event.pageX + "px";
-      mapContainer.style.top = event.pageY + "px";
-    }
-  });
-
-  // 마우스 아웃 이벤트
-  resultSection.addEventListener("mouseout", function (event) {
-    const row = event.target.closest("tr[data-lat][data-lng]");
-    if (row) {
-      mapContainer.style.display = "none"; // 마우스가 나가면 지도 숨기기
-      console.log("마우스 아웃 - 지도 숨김");
+    if (isLastPage) {
+      scrollIcon.classList.add("hidden");
+    } else {
+      scrollIcon.classList.remove("hidden");
     }
   });
 });
