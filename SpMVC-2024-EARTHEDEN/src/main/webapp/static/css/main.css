@@ -1,4 +1,7 @@
 @charset "UTF-8";
+
+@import url("https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&display=swap");
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -8,11 +11,13 @@
 html {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 body {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 header.main {
@@ -26,12 +31,13 @@ section.main {
 
   select,
   input {
-    width: 200px;
+    width: 100%;
     margin-bottom: 10px;
     padding: 15px;
   }
 
   h2 {
+    font-family: "Black Han Sans", sans-serif;
     margin-top: 20px;
   }
 
@@ -71,29 +77,119 @@ section.main {
     }
   }
 }
-/* 모달 창 */
-div.modal {
-  display: none; /* 기본적으로 숨김 */
-  position: fixed;
+
+div.snap-container {
+  overflow-y: auto;
+  height: 100vh;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory; /* 스크롤 스냅핑 활성화 */
+  /* 스크롤바 숨기기 */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+div.snap-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+div.mg-10 {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+div.background {
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  scroll-snap-align: start; /* 각 섹션의 시작 지점에 스냅 */
+  scroll-snap-stop: always; /* 스크롤 스냅이 확실히 멈추도록 설정 */
+}
+
+div.background.restroom {
+  background-image: url(../images/2.jpg);
+}
+div.background.trash-can {
+  background-image: url(../images/3.jpg);
+}
+div.background.wifi {
+  background-image: url(../images/4.jpg);
+}
+
+div.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backdrop-filter: blur(5px);
+  background-color: rgba(255, 255, 255, 0.2);
   z-index: 1;
+}
+
+section.search {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+
+  font-weight: 100;
+  color: white;
+  font-size: 4rem;
+  text-shadow: 1px 1px 1px black;
+
+  h6 {
+    font-size: 2rem;
+    font-family: "Gowun Dodum", sans-serif;
+    color: black;
+    text-shadow: none;
+  }
+}
+
+section.search.restroom {
+  border: 1px solid red;
+  left: 65vw;
+  top: 50vh;
+}
+
+section.search.trash-can {
+  border: 1px solid blue;
+  left: 25vw;
+  top: 40vh;
+}
+
+section.search.wifi {
+  border: 1px solid green;
+  left: 50vw;
+  top: 45vh;
+}
+
+div.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4); /* 검은 배경 */
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 div.modal-content {
   background-color: #fefefe;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* 너비를 화면의 80%로 설정 */
-  max-width: 600px; /* 최대 너비를 600px로 설정 (옵션) */
-  position: absolute; /* 절대 위치 지정 */
-  top: 50%; /* 수직 중앙으로 설정 */
-  left: 50%; /* 수평 중앙으로 설정 */
-  transform: translate(-50%, -50%); /* 수직과 수평 방향 중앙 정렬 */
+  width: 80%;
+  max-width: 600px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 span.close {
@@ -108,4 +204,55 @@ span.close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  section.search.restroom {
+    left: 60vw;
+    top: 45vh;
+  }
+
+  section.search.trash-can {
+    left: 30vw;
+    top: 35vh;
+  }
+
+  section.search.wifi {
+    left: 50vw;
+    top: 40vh;
+  }
+}
+
+@media (max-width: 768px) {
+  section.search.restroom {
+    left: 55vw;
+    top: 40vh;
+  }
+
+  section.search.trash-can {
+    left: 35vw;
+    top: 30vh;
+  }
+
+  section.search.wifi {
+    left: 50vw;
+    top: 35vh;
+  }
+}
+
+@media (max-width: 480px) {
+  section.search.restroom {
+    left: 50vw;
+    top: 35vh;
+  }
+
+  section.search.trash-can {
+    left: 50vw;
+    top: 25vh;
+  }
+
+  section.search.wifi {
+    left: 50vw;
+    top: 30vh;
+  }
 }

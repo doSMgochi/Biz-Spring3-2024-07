@@ -32,7 +32,16 @@ document.addEventListener("DOMContentLoaded", () => {
       "송파구",
       "강동구",
     ],
-    대구: ["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군"],
+    대구: [
+      "중구",
+      "동구",
+      "서구",
+      "남구",
+      "북구",
+      "수성구",
+      "달서구",
+      "달성군",
+    ],
     부산: [
       "중구",
       "서구",
@@ -53,7 +62,18 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
     대전: ["동구", "중구", "서구", "유성구", "대덕구"],
     광주: ["동구", "서구", "남구", "북구", "광산구"],
-    인천: ["중구", "동구", "미추홀구", "연수구", "남동구", "부평구", "계양구", "서구", "강화군", "옹진군"],
+    인천: [
+      "중구",
+      "동구",
+      "미추홀구",
+      "연수구",
+      "남동구",
+      "부평구",
+      "계양구",
+      "서구",
+      "강화군",
+      "옹진군",
+    ],
     강원: [
       "춘천시",
       "원주시",
@@ -209,15 +229,28 @@ document.addEventListener("DOMContentLoaded", () => {
       "예산군",
       "태안군",
     ],
-    충북: ["청주시", "충주시", "제천시", "보은군", "옥천군", "영동군", "증평군", "진천군", "괴산군", "음성군", "단양군"],
+    충북: [
+      "청주시",
+      "충주시",
+      "제천시",
+      "보은군",
+      "옥천군",
+      "영동군",
+      "증평군",
+      "진천군",
+      "괴산군",
+      "음성군",
+      "단양군",
+    ],
   };
-
   // 공통 함수: 시군구 옵션 업데이트
   const updateDistrictOptions = (citySelect, districtSelect, districts) => {
     const city = citySelect.value;
     districtSelect.innerHTML = '<option value="">시군구 선택</option>';
     if (city && districts[city]) {
-      const options = districts[city].map((district) => `<option value="${district}">${district}</option>`).join("");
+      const options = districts[city]
+        .map((district) => `<option value="${district}">${district}</option>`)
+        .join("");
       districtSelect.innerHTML += options;
     }
   };
@@ -236,15 +269,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 쓰레기통 검색
   const trashcanCitySelect = document.getElementById("trashcanCitySelect");
-  const trashcanDistrictSelect = document.getElementById("trashcanDistrictSelect");
+  const trashcanDistrictSelect = document.getElementById(
+    "trashcanDistrictSelect"
+  );
   const trashcanSearchButton = document.getElementById("trashcanSearchButton");
   const trashcanSearchInput = document.getElementById("trashcanSearchInput");
   const trashcanModal = document.getElementById("trashcanModal");
-  const trashcanModalResultSection = document.getElementById("trashcanModalResultSection");
+  const trashcanModalResultSection = document.getElementById(
+    "trashcanModalResultSection"
+  );
   const trashcanCloseModal = trashcanModal.getElementsByClassName("close")[0];
 
   trashcanCitySelect.addEventListener("change", () => {
-    updateDistrictOptions(trashcanCitySelect, trashcanDistrictSelect, districts);
+    updateDistrictOptions(
+      trashcanCitySelect,
+      trashcanDistrictSelect,
+      districts
+    );
   });
 
   // 지역 검색
@@ -257,7 +298,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    let url = `${rootPathWithSlash}trashcan-search?region=${encodeURIComponent(city + " " + district)}`;
+    let url = `${rootPathWithSlash}trashcan-search?region=${encodeURIComponent(
+      city + " " + district
+    )}`;
 
     fetch(url)
       .then((response) => response.text())
@@ -267,7 +310,8 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => {
         console.error("Error fetching trashcan data:", error);
-        trashcanModalResultSection.innerHTML = "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+        trashcanModalResultSection.innerHTML =
+          "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
         trashcanModal.style.display = "block";
       });
   });
@@ -281,7 +325,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    let url = `${rootPathWithSlash}trashcan-search?search=${encodeURIComponent(query)}`;
+    let url = `${rootPathWithSlash}trashcan-search?search=${encodeURIComponent(
+      query
+    )}`;
 
     fetch(url)
       .then((response) => response.text())
@@ -291,26 +337,41 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => {
         console.error("Error fetching trashcan data:", error);
-        trashcanModalResultSection.innerHTML = "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+        trashcanModalResultSection.innerHTML =
+          "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
         trashcanModal.style.display = "block";
       });
   });
 
-  trashcanCloseModal.addEventListener("click", () => modalCloseHandler(trashcanModal));
-  window.addEventListener("click", (event) => modalOutsideClickHandler(event, trashcanModal));
+  trashcanCloseModal.addEventListener("click", () =>
+    modalCloseHandler(trashcanModal)
+  );
+  window.addEventListener("click", (event) =>
+    modalOutsideClickHandler(event, trashcanModal)
+  );
 
   // 화장실 검색
   const restroomCitySelect = document.getElementById("restroomCitySelect");
-  const restroomDistrictSelect = document.getElementById("restroomDistrictSelect");
-  const restroomCityDistrictSearchButton = document.getElementById("restroomCityDistrictSearchButton");
+  const restroomDistrictSelect = document.getElementById(
+    "restroomDistrictSelect"
+  );
+  const restroomCityDistrictSearchButton = document.getElementById(
+    "restroomCityDistrictSearchButton"
+  );
   const restroomSearchButton = document.getElementById("restroomSearchButton");
   const restroomSearchInput = document.getElementById("restroomSearchInput");
   const restroomModal = document.getElementById("restroomModal");
-  const restroomModalResultSection = document.getElementById("restroomModalResultSection");
+  const restroomModalResultSection = document.getElementById(
+    "restroomModalResultSection"
+  );
   const restroomCloseModal = restroomModal.getElementsByClassName("close")[0];
 
   restroomCitySelect.addEventListener("change", () => {
-    updateDistrictOptions(restroomCitySelect, restroomDistrictSelect, districts);
+    updateDistrictOptions(
+      restroomCitySelect,
+      restroomDistrictSelect,
+      districts
+    );
   });
 
   // 지역 검색
@@ -323,7 +384,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    let url = `${rootPathWithSlash}restroom-search?roadAddressPart1=${encodeURIComponent(city)}&roadAddressPart2=${encodeURIComponent(district)}`;
+    let url = `${rootPathWithSlash}restroom-search?roadAddressPart1=${encodeURIComponent(
+      city
+    )}&roadAddressPart2=${encodeURIComponent(district)}`;
 
     fetch(url)
       .then((response) => response.text())
@@ -333,7 +396,8 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => {
         console.error("Error fetching restroom data:", error);
-        restroomModalResultSection.innerHTML = "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+        restroomModalResultSection.innerHTML =
+          "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
         restroomModal.style.display = "block";
       });
   });
@@ -347,7 +411,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    let url = `${rootPathWithSlash}restroom-search?search=${encodeURIComponent(query)}`;
+    let url = `${rootPathWithSlash}restroom-search?search=${encodeURIComponent(
+      query
+    )}`;
 
     fetch(url)
       .then((response) => response.text())
@@ -357,22 +423,31 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => {
         console.error("Error fetching restroom data:", error);
-        restroomModalResultSection.innerHTML = "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+        restroomModalResultSection.innerHTML =
+          "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
         restroomModal.style.display = "block";
       });
   });
 
-  restroomCloseModal.addEventListener("click", () => modalCloseHandler(restroomModal));
-  window.addEventListener("click", (event) => modalOutsideClickHandler(event, restroomModal));
+  restroomCloseModal.addEventListener("click", () =>
+    modalCloseHandler(restroomModal)
+  );
+  window.addEventListener("click", (event) =>
+    modalOutsideClickHandler(event, restroomModal)
+  );
 
   // 와이파이 검색
   const wifiCitySelect = document.getElementById("wifiCitySelect");
   const wifiDistrictSelect = document.getElementById("wifiDistrictSelect");
-  const wifiCityDistrictSearchButton = document.getElementById("wifiCityDistrictSearchButton");
+  const wifiCityDistrictSearchButton = document.getElementById(
+    "wifiCityDistrictSearchButton"
+  );
   const wifiSearchButton = document.getElementById("wifiSearchButton");
   const wifiSearchInput = document.getElementById("wifiSearchInput");
   const wifiModal = document.getElementById("wifiModal");
-  const wifiModalResultSection = document.getElementById("wifiModalResultSection");
+  const wifiModalResultSection = document.getElementById(
+    "wifiModalResultSection"
+  );
   const wifiCloseModal = wifiModal.getElementsByClassName("close")[0];
 
   wifiCitySelect.addEventListener("change", () => {
@@ -389,9 +464,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    let url = `${rootPathWithSlash}wifi-search?installationProvince=${encodeURIComponent(city)}&installationCityCounty=${encodeURIComponent(
-      district
-    )}`;
+    let url = `${rootPathWithSlash}wifi-search?installationProvince=${encodeURIComponent(
+      city
+    )}&installationCityCounty=${encodeURIComponent(district)}`;
 
     fetch(url)
       .then((response) => response.text())
@@ -401,7 +476,8 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => {
         console.error("Error fetching wifi data:", error);
-        wifiModalResultSection.innerHTML = "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+        wifiModalResultSection.innerHTML =
+          "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
         wifiModal.style.display = "block";
       });
   });
@@ -415,7 +491,9 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    let url = `${rootPathWithSlash}wifi-search?search=${encodeURIComponent(query)}`;
+    let url = `${rootPathWithSlash}wifi-search?search=${encodeURIComponent(
+      query
+    )}`;
 
     fetch(url)
       .then((response) => response.text())
@@ -425,13 +503,17 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => {
         console.error("Error fetching wifi data:", error);
-        wifiModalResultSection.innerHTML = "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
+        wifiModalResultSection.innerHTML =
+          "<p>검색 중 오류가 발생했습니다. 다시 시도해 주세요.</p>";
         wifiModal.style.display = "block";
       });
   });
 
   wifiCloseModal.addEventListener("click", () => modalCloseHandler(wifiModal));
-  window.addEventListener("click", (event) => modalOutsideClickHandler(event, wifiModal));
+  window.addEventListener("click", (event) =>
+    modalOutsideClickHandler(event, wifiModal)
+  );
+
   console.log("지도 초기화 시작"); // 지도 초기화 확인
   const mapContainer = document.getElementById("map"); // map 컨테이너
   console.log("mapContainer:", mapContainer); // mapContainer가 제대로 선택되었는지 확인
