@@ -128,7 +128,7 @@ div.background {
   position: relative;
   width: 100vw;
   height: 100vh;
-  scroll-snap-align: center;
+  scroll-snap-align: start;
   scroll-snap-stop: always;
 }
 
